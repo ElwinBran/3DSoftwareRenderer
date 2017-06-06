@@ -1,6 +1,5 @@
 package main.java.models;
 
-
 public class Matrix4f
 {
     private float[][] m;
@@ -9,7 +8,11 @@ public class Matrix4f
     {
         m = new float[4][4];
     }
-
+    /**
+     * Changes this matrix into an identity matrix (only diagonally 1's).
+     * 
+     * @return this matrix.
+     */
     public Matrix4f initIdentity()
     {
         m[0][0] = 1;

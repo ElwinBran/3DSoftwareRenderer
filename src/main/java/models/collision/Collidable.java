@@ -1,10 +1,15 @@
-package main.java.models;
+
+package main.java.models.collision;
+
+import main.java.models.Vector4f;
 
 /**
- *
+ * Any 3D object that can collide with other objects should implement this interface.
+ * 
  * @author Elwin Slokker
+ * @version 0.1
  */
-public abstract class Shape3D
+public interface Collidable
 {
     /**
      * Should always return a point in the shape that is the furthest point in the shape along the given direction.

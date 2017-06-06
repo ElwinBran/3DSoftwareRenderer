@@ -12,7 +12,7 @@ public class Mesh
 
     public Mesh(String fileName) throws IOException
     {
-        IndexedModel model = new OBJModel(fileName).toIndexedModel();
+        final IndexedModel model = new OBJModel(fileName).toIndexedModel();
 
         m_vertices = new ArrayList<Vertex>();
         for (int i = 0; i < model.getPositions().size(); i++)

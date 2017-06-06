@@ -1,4 +1,7 @@
-package main.java.models;
+package main.java.models.collision;
+
+import main.java.models.Transform;
+import main.java.models.Vector4f;
 
 
 /**

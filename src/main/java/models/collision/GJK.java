@@ -1,7 +1,8 @@
-package main.java.models;
+package main.java.models.collision;
 
 
 import java.util.ArrayList;
+import main.java.models.Vector4f;
 
 /**
  * Gilbert–Johnson–Keerthi algorithm.

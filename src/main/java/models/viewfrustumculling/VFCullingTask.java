@@ -2,7 +2,7 @@
 package main.java.models.viewfrustumculling;
 
 import java.util.concurrent.Callable;
-import main.java.models.BoundingFrustum;
+import main.java.models.collision.BoundingFrustum;
 import main.java.models.Mesh;
 
 /**
