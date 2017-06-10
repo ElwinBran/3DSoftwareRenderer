@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import main.java.models.collision.BoundingVolume;
 import main.java.models.scene.RenderableScene;
+import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
 
 /**
  * Defines basic behaviour of a 3D camera.
