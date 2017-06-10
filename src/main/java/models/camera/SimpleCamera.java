@@ -33,7 +33,6 @@ public class SimpleCamera extends AbstractCamera
         Vector4f cameraPos = getTransform().getTransformedPos().mul(-1);
 
         Matrix4f cameraTranslation = new Matrix4f().initTranslation(cameraPos.getX(), cameraPos.getY(), cameraPos.getZ());
-
         return m_projection.mul(cameraRotation.mul(cameraTranslation));
     }
 

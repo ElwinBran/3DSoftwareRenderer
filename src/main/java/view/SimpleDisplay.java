@@ -13,13 +13,10 @@ import javafx.scene.canvas.Canvas;
 public class SimpleDisplay extends AbstractDisplay
 {
     private final Canvas canvas;
-    private final int width;
-    private final int height;
     
     public SimpleDisplay(final int  width, final int height)
     {
-        this.width = width;
-        this.height = height;
+        super(width, height);
         this.canvas = new Canvas((double) width, (double) height);
         this.getChildren().add(this.canvas);
         //this.getChildren().add(new Button("click"));

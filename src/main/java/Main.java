@@ -44,6 +44,9 @@ import main.java.models.Transform;
  * The sole purpose of this class is to hold the main method.
  *
  * Any other use should be placed in a separate class
+ * @author Benny Bobaganoosh <thebennybox@gmail.com>
+ * @author Elwin Slokker
+ * @version 0.1
  */
 public class Main
 {
