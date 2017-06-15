@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 /**
  *
  * @author Elwin Slokker
- * @version 0.0
+ * @version 0.1
  */
 public abstract class AbstractDisplay extends Parent implements DisplayInterface
 {

@@ -2,14 +2,14 @@ package main.java.models.collision;
 
 
 import java.util.ArrayList;
-import main.java.models.Vector4f;
+import main.java.models.threedee.Vector4f;
 
 /**
  * Gilbert–Johnson–Keerthi algorithm.
- *
+ * 
  * @author Elwin Slokker
  */
-public class GJK
+public class GJKAlgorithm
 {
     private static Vector4f a;
     private static Vector4f b;
@@ -27,15 +27,15 @@ public class GJK
 
         c = support(convexShape1, convexShape2, dir);
 
-        dir = c.mul(-1f);//negative direction
+        dir = c.multiply(-1f);//negative direction
 
         b = support(convexShape1, convexShape2, dir);
 
-        if (b.dot(dir) < 0)
+        if (b.dotProduct(dir) < 0)
         {
             return false;
         }
-        dir = doubleCross(c.sub(b), b.mul(-1f));
+        dir = doubleCross(c.subtract(b), b.multiply(-1f));
 
         n = 2; //begin with 2 points in simplex
 
@@ -43,7 +43,7 @@ public class GJK
         while (steps < 50)
         {
             a = support(convexShape1, convexShape2, dir);
-            if (a.dot(dir) < 0)
+            if (a.dotProduct(dir) < 0)
             {
                 return false;
             } else if (containsOrigin(dir))
@@ -77,8 +77,8 @@ public class GJK
 
     private static boolean line(Vector4f dir)
     {
-        Vector4f ab = b.sub(a);
-        Vector4f ao = a.mul(-1f);//vector3::zero() - a
+        Vector4f ab = b.subtract(a);
+        Vector4f ao = a.multiply(-1f);//vector3::zero() - a
 
         //can t be behind b;
         //new direction towards a0
@@ -94,15 +94,15 @@ public class GJK
     private static boolean triangle(Vector4f dir)
     {
         Vector4f ao = new Vector4f(-a.getX(), -a.getY(), -a.getZ());
-        Vector4f ab = b.sub(a);
-        Vector4f ac = c.sub(a);
-        Vector4f abc = ab.cross(ac);
+        Vector4f ab = b.subtract(a);
+        Vector4f ac = c.subtract(a);
+        Vector4f abc = ab.crossProduct(ac);
 
         //point is can't be behind/in the direction of B,C or BC
-        Vector4f ab_abc = ab.cross(abc);
+        Vector4f ab_abc = ab.crossProduct(abc);
         // is the origin away from ab edge? in the same plane
         //if a0 is in that direction than
-        if (ab_abc.dot(ao) > 0)
+        if (ab_abc.dotProduct(ao) > 0)
         {
             //change points
             c = b;
@@ -115,11 +115,11 @@ public class GJK
             return false;
         }
 
-        Vector4f abc_ac = abc.cross(ac);
+        Vector4f abc_ac = abc.crossProduct(ac);
 
         // is the origin away from ac edge? or it is in abc?
         //if a0 is in that direction than
-        if (abc_ac.dot(ao) > 0)
+        if (abc_ac.dotProduct(ao) > 0)
         {
             //keep c the same
             b = a;
@@ -132,7 +132,7 @@ public class GJK
         }
 
         //now can build tetrahedron; check if it's above or below
-        if (abc.dot(ao) > 0)
+        if (abc.dotProduct(ao) > 0)
         {
             //base of tetrahedron
             d = c;
@@ -146,7 +146,7 @@ public class GJK
             //upside down tetrahedron
             d = b;
             b = a;
-            dir = abc.mul(-1f);
+            dir = abc.multiply(-1f);
         }
 
         n = 3;
@@ -156,15 +156,15 @@ public class GJK
 
     private static boolean tetrahedron(Vector4f dir)
     {
-        Vector4f ao = a.mul(-1f);//0-a
-        Vector4f ab = b.sub(a);
-        Vector4f ac = c.sub(a);
+        Vector4f ao = a.multiply(-1f);//0-a
+        Vector4f ab = b.subtract(a);
+        Vector4f ac = c.subtract(a);
 
         //build abc triangle
-        Vector4f abc = ab.cross(ac);
+        Vector4f abc = ab.crossProduct(ac);
 
         //CASE 1
-        if (abc.dot(ao) > 0)
+        if (abc.dotProduct(ao) > 0)
         {
             //in front of triangle ABC
             //we don't have to change the ao,ab,ac,abc meanings
@@ -172,13 +172,13 @@ public class GJK
         }
 
         //CASE 2:
-        Vector4f ad = d.sub(a);
+        Vector4f ad = d.subtract(a);
 
         //build acd triangle
-        Vector4f acd = ac.cross(ad);
+        Vector4f acd = ac.crossProduct(ad);
 
 	 //same direaction with ao
-	 if (acd.dot(ao) > 0)
+	 if (acd.dotProduct(ao) > 0)
         {
 
             //in front of triangle ACD
@@ -192,11 +192,11 @@ public class GJK
         }
 
         //build adb triangle
-        Vector4f adb = ad.cross(ab);
+        Vector4f adb = ad.crossProduct(ab);
 
         //case 3:
         //same direaction with ao
-        if (adb.dot(ao) > 0)
+        if (adb.dotProduct(ao) > 0)
         {
 
             //in front of triangle ADB
@@ -219,9 +219,9 @@ public class GJK
     {
 
         //almost the same like triangle checks
-        Vector4f ab_abc = ab.cross(abc);
+        Vector4f ab_abc = ab.crossProduct(abc);
 
-        if (ab_abc.dot(ao) > 0)
+        if (ab_abc.dotProduct(ao) > 0)
         {
             c = b;
             b = a;
@@ -237,9 +237,9 @@ public class GJK
             return false;
         }
 
-        Vector4f acp = abc.cross(ac);
+        Vector4f acp = abc.crossProduct(ac);
 
-        if (acp.dot(ao) > 0)
+        if (acp.dotProduct(ao) > 0)
         {
             b = a;
 
@@ -284,8 +284,8 @@ public class GJK
 	 vector4f p3 = p1 - p2;
          */
         return convexShape1.furthestPointFromDirection(searchDirection)
-                .sub(convexShape2.furthestPointFromDirection(
-                        searchDirection.mul(-1f)));
+                .subtract(convexShape2.furthestPointFromDirection(
+                        searchDirection.multiply(-1f)));
     }
 
     /**
@@ -296,7 +296,7 @@ public class GJK
      */
     public static Vector4f doubleCross(Vector4f vectorA, Vector4f vectorB)
     {
-        return vectorA.cross(vectorA.cross(vectorB));
+        return vectorA.crossProduct(vectorA.crossProduct(vectorB));
     }
 }
 

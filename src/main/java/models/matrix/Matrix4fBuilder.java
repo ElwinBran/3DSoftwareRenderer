@@ -1,7 +1,7 @@
 
 package main.java.models.matrix;
 
-import main.java.models.Vector4f;
+import main.java.models.threedee.Vector4f;
 
 /**
  * A singleton able to initialize matrices (for instance a perspective matrix).
@@ -14,13 +14,12 @@ import main.java.models.Vector4f;
 public class Matrix4fBuilder
 {
     /**
-     * @since 0.0
+     * 
      */
     private static final Matrix4fBuilder INSTANCE = new Matrix4fBuilder();
     /**
      * Get the {@code Matrix4fBuilder} singleton.
      * @return the builder.
-     * @since 0.0
      */
     public static Matrix4fBuilder getInstance()
     {
@@ -28,17 +27,23 @@ public class Matrix4fBuilder
     }
     /**
      * Hiding the constructor because the builder is a singleton.
-     * @since 0.1
      */
     private Matrix4fBuilder()
+    {    
+    }
+    /**
+     * Creates an empty matrix.
+     * 
+     * @return a new and empty {@code Matrix4f}.
+     */
+    public Matrix4f initEmpty()
     {
-        
+        return new Matrix4f();
     }
     /**
      * Changes this matrix into an identity matrix (only diagonally 1's and everything else 0).
      * 
      * @return a new identity matrix.
-     * @since 0.1
      */
     public Matrix4f initIdentity()
     {
@@ -62,7 +67,6 @@ public class Matrix4fBuilder
      * @param y
      * @param z
      * @return 
-     * @since 0.1
      */
     public Matrix4f initTranslation(float x, float y, float z)
     {
@@ -77,7 +81,6 @@ public class Matrix4fBuilder
      * @param halfWidth representing half of the width of the screen.
      * @param halfHeight representing half the height of the screen.
      * @return 
-     * @since 0.1
      */
     public Matrix4f initScreenSpaceTransform(float halfWidth, float halfHeight)
     {
@@ -107,7 +110,6 @@ public class Matrix4fBuilder
      * @param z
      * @param angle the amount of rotation, in radians.
      * @return 
-     * @since 0.1
      */
     public Matrix4f initRotation(float x, float y, float z, float angle)
     {
@@ -139,7 +141,6 @@ public class Matrix4fBuilder
      * @param y
      * @param z
      * @return 
-     * @since 0.1
      */
     public Matrix4f initRotation(float x, float y, float z)
     {
@@ -161,7 +162,7 @@ public class Matrix4fBuilder
         ry.set(2, 0, (float) Math.sin(y));
         ry.set(2, 2, (float) Math.cos(y));
 
-        return rz.mul(ry.mul(rx));
+        return rz.mulitply(ry.mulitply(rx));
     }
     /**
      * 
@@ -169,7 +170,6 @@ public class Matrix4fBuilder
      * @param y
      * @param z
      * @return 
-     * @since 0.1
      */
     public Matrix4f initScale(float x, float y, float z)
     {
@@ -186,7 +186,6 @@ public class Matrix4fBuilder
      * @param zNear
      * @param zFar
      * @return 
-     * @since 0.1
      */
     public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
     {
@@ -221,7 +220,6 @@ public class Matrix4fBuilder
      * @param near
      * @param far
      * @return 
-     * @since 0.1
      */
     public Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far)
     {
@@ -242,16 +240,15 @@ public class Matrix4fBuilder
      * @param forward
      * @param up
      * @return 
-     * @since 0.1
      */
     public Matrix4f initRotation(Vector4f forward, Vector4f up)
     {
         Vector4f f = forward.normalized();
 
         Vector4f r = up.normalized();
-        r = r.cross(f);
+        r = r.crossProduct(f);
 
-        Vector4f u = f.cross(r);
+        Vector4f u = f.crossProduct(r);
 
         return initRotation(f, u, r);
     }
@@ -262,7 +259,6 @@ public class Matrix4fBuilder
      * @param up
      * @param right
      * @return 
-     * @since 0.1
      */
     public Matrix4f initRotation(final Vector4f forward, final Vector4f up, final Vector4f right)
     {

@@ -1,7 +1,9 @@
 package main.java.models.matrix;
 
-import main.java.models.*;
+import main.java.models.threedee.Vector4f;
 /**
+ * Represents a mathematical 4x4 matrix where every value is a {@code float}.
+ * It is used for complex 3D calculations.
  * 
  * @author Elwin Slokker
  * @version 0.2
@@ -9,17 +11,17 @@ import main.java.models.*;
 public class Matrix4f implements Cloneable
 {
     /**
-     * 
+     * Should always be 4.
      */
     final static int WIDTH = 4;
     /**
-     * 
+     * Should always be 4.
      */
     final static int HEIGHT = 4;
     /**
-     * 
+     * Stores the actual matrix.
      */
-    private final float[][] m = new float[4][4];
+    private final float[][] m = new float[WIDTH][HEIGHT];
 
     /**
      * 
@@ -34,36 +36,37 @@ public class Matrix4f implements Cloneable
                 m[3][0] * r.getX() + m[3][1] * r.getY() + m[3][2] * r.getZ() + m[3][3] * r.getW());
     }
     /**
+     * The dot product of {@code this} and {@code r}.
+     * Because two identity matrices of the same size are multiplied, the calculation has been simplified.
      * 
      * @param r
-     * @return 
+     * @return the product of the matrices.
      */
-    public Matrix4f mul(Matrix4f r)
+    public Matrix4f mulitply(Matrix4f r)
     {
-        Matrix4f res = new Matrix4f();
-        for (int i = 0; i < 4; i++)
+        Matrix4f result = new Matrix4f();
+        for (int i = 0; i < WIDTH; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < HEIGHT; j++)
             {
-                res.set(i, j, m[i][0] * r.get(0, j)
+                result.set(i, j, m[i][0] * r.get(0, j)
                         + m[i][1] * r.get(1, j)
                         + m[i][2] * r.get(2, j)
                         + m[i][3] * r.get(3, j));
             }
         }
-        return res;
+        return result;
     }
     /**
-     * 
-     * @return 
+     * @return a copy of the array that is used to store the matrix.
      */
     public float[][] getM()
     {
-        float[][] res = new float[4][4];
+        float[][] res = new float[WIDTH][HEIGHT];
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < WIDTH; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < HEIGHT; j++)
             {
                 res[i][j] = m[i][j];
             }
@@ -72,10 +75,9 @@ public class Matrix4f implements Cloneable
         return res;
     }
     /**
-     * 
-     * @param x
-     * @param y
-     * @return 
+     * @param x the column of the value.
+     * @param y the row of the value.
+     * @return the value at ({@code x}, {@code y}).
      */
     public float get(int x, int y)
     {
@@ -83,7 +85,7 @@ public class Matrix4f implements Cloneable
     }
 
     /**
-     * 
+     * Overrides the internal matrix with {@code m}.
      * @param m 
      */
     public void setM(float[][] m)

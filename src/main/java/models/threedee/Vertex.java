@@ -1,8 +1,6 @@
-package main.java.models;
-
-
 /**
  * @file
+ * @author Elwin Slokker
  * @author Benny Bobaganoosh <thebennybox@gmail.com>
  * @section LICENSE
  *
@@ -29,6 +27,12 @@ package main.java.models;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+package main.java.models.threedee;
+
+import main.java.models.matrix.Matrix4f;
+
+
+
 public class Vertex
 {
     private Vector4f m_pos;
@@ -88,7 +92,7 @@ public class Vertex
         return new Vertex(new Vector4f(m_pos.getX() / m_pos.getW(), m_pos.getY() / m_pos.getW(),
                 m_pos.getZ() / m_pos.getW(), m_pos.getW()),
                 m_texCoords, m_normal);
-    }//TODO simply add numbers here for displacement!
+    }
 
     public float triangleAreaTimesTwo(Vertex b, Vertex c)
     {
@@ -104,9 +108,9 @@ public class Vertex
     public Vertex lerp(Vertex other, float lerpAmt)
     {
         return new Vertex(
-                m_pos.lerp(other.getPosition(), lerpAmt),
-                m_texCoords.lerp(other.GetTexCoords(), lerpAmt),
-                m_normal.lerp(other.getNormal(), lerpAmt)
+                m_pos.linearlyInterpolate(other.getPosition(), lerpAmt),
+                m_texCoords.linearlyInterpolate(other.GetTexCoords(), lerpAmt),
+                m_normal.linearlyInterpolate(other.getNormal(), lerpAmt)
         );
     }
 

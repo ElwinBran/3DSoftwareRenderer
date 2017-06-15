@@ -4,7 +4,9 @@ package main.java.models.camera;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import main.java.models.collision.BoundingVolume;
+import main.java.models.matrix.Matrix4f;
 import main.java.models.scene.RenderableScene;
+import main.java.models.threedee.Transform;
 import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
 
 /**
@@ -13,38 +15,70 @@ import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
  * or setting the view frustum culler. 
  * 
  * @author Elwin Slokker
- * @version 0.3
+ * @version 0.4
  */
 public abstract class AbstractCamera implements CameraInterface
 {
+    /**
+     * Indicates if the camera can be used or not.
+     */
+    protected boolean isUsable = false;
     /**
      * 
      */
     private ViewVolumeCullInterface viewVolumeCuller;
     /**
-     * 
+     * Effectively final by accessors.
      */
     private final RenderableScene containerScene;
     /**
      * 
      */
-    private final CameraType type;
+    private CameraType type;
     /**
      * The volume the camera uses to cull.
      */
     private BoundingVolume boundingViewVolume;
     /**
+     * 
+     */
+    private Transform transform;
+    /**
+     * Stores the projection matrix.
+     */
+    private Matrix4f projectionMatrix;
+    /**
+     * Stores the screen space matrix.
+     */
+    private Matrix4f screenMatrix;
+    /**
      * {@inheritDoc }
-     * @since 0.2
+     */
+    @Override
+    public boolean isUsable()
+    {
+        return this.isUsable;
+    }
+    @Override
+    @Deprecated
+    public void setUsable(boolean isUsable)
+    {
+        //this.isUsable = isUsable;
+    }
+    /**
+     * {@inheritDoc }
      */
     @Override 
     public RenderableScene getScene()
     {
         return this.containerScene;
     }
+    protected void setScene(RenderableScene scene)
+    {
+        
+    }
     /**
      * {@inheritDoc }
-     * @since 0.1
      */
     @Override
     public void setViewVolumeCuller(ViewVolumeCullInterface viewVolumeCuller)
@@ -53,7 +87,6 @@ public abstract class AbstractCamera implements CameraInterface
     }
     /**
      * {@inheritDoc }
-     * @since 0.1
      */
     @Override
     public ViewVolumeCullInterface getViewVolumeCuller()
@@ -63,7 +96,6 @@ public abstract class AbstractCamera implements CameraInterface
     
     /**
      * {@inheritDoc }
-     * @since 0.1
      */
     @Override
     public CameraType getType()
@@ -74,7 +106,6 @@ public abstract class AbstractCamera implements CameraInterface
      * 
      * @param type
      * @return 
-     * @since 0.1
      */
     @Override
     public AbstractCamera setType(CameraType type)
@@ -84,8 +115,24 @@ public abstract class AbstractCamera implements CameraInterface
         //return ((type != this.type )? new (this.viewFrustumCuller, this.type): this);
     }
     /**
+     * 
+     * @return 
+     */
+    @Override
+    public Transform getTransform()
+    {
+        return this.transform;
+    }
+    /**
      * {@inheritDoc}
-     * @since 0.3
+     */
+    @Override
+    public void setTransform(Transform transform)
+    {
+        this.transform = transform;
+    }
+    /**
+     * {@inheritDoc}
      */
     @Override
     public BoundingVolume getViewBoundingVolume()
@@ -94,7 +141,6 @@ public abstract class AbstractCamera implements CameraInterface
     }
     /**
      * {@inheritDoc}
-     * @since 0.3
      */
     @Override
     public void setViewBoundingVolume(BoundingVolume volume)
@@ -102,8 +148,21 @@ public abstract class AbstractCamera implements CameraInterface
         this.boundingViewVolume = volume;
     }
     /**
+     * {@inheritDoc}
+     */
+    public Matrix4f getProjectionSpaceMatrix()
+    {
+        return this.projectionMatrix;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public Matrix4f getSceenSpaceMatrix()
+    {
+        return this.screenMatrix;
+    }
+    /**
      * {@inheritDoc }
-     * @since 0.2
      */
     @Override
     public void drawView(PixelWriter pixelWriter)
@@ -114,13 +173,26 @@ public abstract class AbstractCamera implements CameraInterface
     }
     /**
      * {@inheritDoc}
-     * @since 0.2
      */
     @Override
     public Image makeView()
-    { 
+    {
+        //SimpleCameraBuilder.startBuild(null).setScene(null).setType(null).setTransfrom(null).setViewVolume(null).setViewVolumeCull(null).
         //draw things from the scene
         return null;
+    }
+    protected AbstractCamera(final BaseCameraBuilder builder)
+    {
+        this.containerScene = builder.containerScene;
+        this.transform = builder.transform;
+        this.type = builder.type;
+        this.boundingViewVolume = builder.boundingViewVolume;
+        this.viewVolumeCuller = builder.viewVolumeCuller;
+    }
+    AbstractCamera(final RenderableScene scene)
+    {
+        this.containerScene = scene;
+        this.type = null;
     }
     /**
      * Defacto constructor, a builder seems more suitable.
@@ -129,7 +201,6 @@ public abstract class AbstractCamera implements CameraInterface
      * @param viewVolumeCuller
      * @param type 
      * @param volume 
-     * @since 0.2
      */
     public AbstractCamera(final RenderableScene scene, final ViewVolumeCullInterface viewVolumeCuller, final CameraType type, final BoundingVolume volume)
     {

@@ -2,8 +2,8 @@
 package main.java.models.viewvolumeculling;
 
 import java.util.List;
-import main.java.models.Mesh;
 import main.java.models.collision.BoundingVolume;
+import main.java.models.newmodels.RenderableObject;
 
 /**
  * Represents a culler that actually does not cull.
@@ -19,10 +19,9 @@ public class ViewVolumeCullingDisabled implements ViewVolumeCullInterface
      * @param volume does nothing, since it does not cull.
      * @param meshes the list of objects.
      * @return {@code meshes}.
-     * @since 0.1
      */
     @Override
-    public List<Mesh> meshesInsideViewFrustum(BoundingVolume volume, List<Mesh> meshes)
+    public List<RenderableObject> meshesInsideViewFrustum(BoundingVolume volume, List<RenderableObject> meshes)
     {
         return meshes;
     }

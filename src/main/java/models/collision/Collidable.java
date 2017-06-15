@@ -1,7 +1,7 @@
 
 package main.java.models.collision;
 
-import main.java.models.Vector4f;
+import main.java.models.threedee.Vector4f;
 
 /**
  * Any 3D object that can collide with other objects should implement this interface.

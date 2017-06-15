@@ -1,8 +1,7 @@
 package main.java.models.collision;
 
-import main.java.models.Transform;
-import main.java.models.Vector4f;
-import main.java.models.collision.BoundingShape;
+import main.java.models.threedee.Transform;
+import main.java.models.threedee.Vector4f;
 
 
 /**
@@ -35,7 +34,7 @@ public class BoundingSphere extends BoundingShape
     public Vector4f furthestPointFromDirection(Vector4f direction)
     {
         //remove the division if direction is known to be normalized elsewhere
-        Vector4f newguy = direction.mul(this.radius / direction.length());
+        Vector4f newguy = direction.multiply(this.radius / direction.length());
         return  newguy.add(this.location);
     }
     @Override
@@ -49,7 +48,7 @@ public class BoundingSphere extends BoundingShape
     @Override
     public boolean isInside(Vector4f point, Vector4f translation)
     {
-        Vector4f originPoint = point.sub(translation);
+        Vector4f originPoint = point.subtract(translation);
         return radius <= Math.sqrt(originPoint.getX() * originPoint.getX()
                 + originPoint.getY() * originPoint.getY()
                 + originPoint.getZ() * originPoint.getZ());

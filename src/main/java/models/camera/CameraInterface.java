@@ -3,7 +3,9 @@ package main.java.models.camera;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
+import main.java.models.threedee.Transform;
 import main.java.models.collision.BoundingVolume;
+import main.java.models.matrix.Matrix4f;
 import main.java.models.scene.RenderableScene;
 import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
 
@@ -18,45 +20,66 @@ import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
 public interface CameraInterface
 {
     /**
+     * @return whether this camera is usable or not.
+     */
+    public boolean isUsable();
+    /**
+     * Allows to change the usability.
+     * 
+     * @param isUsable
+     */
+    @Deprecated
+    public void setUsable(boolean isUsable);
+    /**
      * @return the scene that contains this camera.
-     * @since 0.3
      */
     public RenderableScene getScene();
     /**
      * @return the type of camera (perspective, orthogonal and maybe more in later versions).
-     * @since 0.1
      */
     public CameraType getType();
     /**
      * 
      * @param type
      * @return 
-     * @since 0.1
      */
     public CameraInterface setType(CameraType type);
     /**
+     * @return the transform of the camera.
+     */
+    public Transform getTransform();
+    /**
+     * Set the position and rotation of the camera (scale does nothing for a camera).
+     * @param transform
+     */
+    public void setTransform(Transform transform);
+    /**
+     * @return the projection matrix this camera uses.
+     */
+    public Matrix4f getProjectionSpaceMatrix();
+    /**
+     * @return the screen matrix this camera uses.
+     */
+    public Matrix4f getSceenSpaceMatrix();
+    /**
      * 
      * @param viewVolumeCuller
-     * @since 0.1
      */
     public void setViewVolumeCuller(ViewVolumeCullInterface viewVolumeCuller);
     /**
      * 
      * @return 
-     * @since 0.1
      */
     public ViewVolumeCullInterface getViewVolumeCuller();
     /**
      * @return the {@code BoundingVolume} assigned to this camera (what it uses 
      * to cull).
-     * @since 0.4
      */
     public BoundingVolume getViewBoundingVolume();
     /**
      * Sets the volume the camera uses to cull.
      * 
-     * @param volume a new {@code BoundingVolume}
-     * @since 0.4
+     * @param volume a new {@code BoundingVolume}.
      */
     public void setViewBoundingVolume(BoundingVolume volume);
     /**
@@ -65,7 +88,6 @@ public interface CameraInterface
      * TODO might become obsolete depending on later choices.
      * 
      * @param pixelWriter the writer the camera should use to output the image.
-     * @since 0.2
      */
     public void drawView(PixelWriter pixelWriter);
     /**
@@ -74,7 +96,6 @@ public interface CameraInterface
      * TODO might become obsolete depending on later choices.
      * 
      * @return what the camera 'sees' in the scene it is in.
-     * @since 0.2
      */
     public Image makeView();
 }

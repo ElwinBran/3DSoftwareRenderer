@@ -3,37 +3,35 @@ package main.java.models.viewvolumeculling;
 
 import java.util.concurrent.Callable;
 import main.java.models.collision.BoundingVolume;
-import main.java.models.Mesh;
+import main.java.models.newmodels.RenderableObject;
 
 /**
  *
  * @author Elwin Slokker
  * @version 0.2
  */
-public class VVCullingTask implements Callable<Mesh>
+public class VVCullingTask implements Callable<RenderableObject>
 {
     private final BoundingVolume volume;
-    private final Mesh mesh;
+    private final RenderableObject object;
     
     /**
      * 
      * @param volume
-     * @param mesh 
-     * @since 0.1
+     * @param object 
      */
-    public VVCullingTask(BoundingVolume volume, Mesh mesh)
+    public VVCullingTask(BoundingVolume volume, RenderableObject object)
     {
         this.volume = volume;
-        this.mesh = mesh;
+        this.object = object;
     }
     /**
      * 
      * @return
      * @throws Exception 
-     * @since 0.1
      */
     @Override
-    public Mesh call() throws Exception
+    public RenderableObject call() throws Exception
     {
         return null;
     }

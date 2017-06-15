@@ -7,7 +7,7 @@ package main.java.models.renderers;
  * @author Elwin Slokker
  * @version 0.0
  */
-public class ScanlineAlgorithm  implements Renderer
-{
+public abstract class ScanlineAlgorithm  implements Renderer
+{//TODO remove abstract?
     
 }

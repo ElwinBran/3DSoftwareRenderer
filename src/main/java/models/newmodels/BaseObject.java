@@ -4,9 +4,9 @@ package main.java.models.newmodels;
 /**
  *
  * @author Elwin Slokker
- * @version 0.0
+ * @version 0.1
  */
-public class BaseObject implements ObjectInterface
+public abstract class BaseObject implements RenderableObject
 {
     
 }

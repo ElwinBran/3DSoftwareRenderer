@@ -6,7 +6,7 @@ package main.java.models.renderers;
  * @author Elwin Slokker
  * @version 0.0
  */
-public class RayTracer  implements Renderer
-{
+public abstract class RayTracer  implements Renderer
+{//TODO remove abstract?
     
 }

@@ -1,5 +1,4 @@
-package main.java.models;
-
+package main.java.models.threedee;
 
 
 /**
@@ -29,9 +28,9 @@ public class Plane
      */
     public Plane(Vector4f firstPoint, Vector4f secondPoint, final Vector4f thirdPoint)
     {
-        firstPoint = firstPoint.sub(thirdPoint);
-        secondPoint = secondPoint.sub(thirdPoint);
-        this.planeNormal = firstPoint.cross(secondPoint).normalized();
+        firstPoint = firstPoint.subtract(thirdPoint);
+        secondPoint = secondPoint.subtract(thirdPoint);
+        this.planeNormal = firstPoint.crossProduct(secondPoint).normalized();
         /*
         float x1, x2, y1, y2, z1, z2;
         x1 = firstPoint.GetX() - thirdPoint.GetX();//1
@@ -45,7 +44,7 @@ public class Plane
         float c = x1 * y2 - y1 * x2;//1
         this.planeNormal = new Vector4f(a,b,c,0.0f).Normalized();
          */
-        this.d = -(this.planeNormal.dot(thirdPoint));
+        this.d = -(this.planeNormal.dotProduct(thirdPoint));
     }
 
     /**
@@ -82,7 +81,7 @@ public class Plane
     public float distanceTo(Vector4f point)
     {
         //(-D = (<a,b,c>.P<x,y,z>) -d => D = -((<a,b,c>.P<x,y,z>) -d))
-        return -((this.planeNormal.dot(point) - this.d));
+        return -((this.planeNormal.dotProduct(point) - this.d));
     }
     /**
      * 

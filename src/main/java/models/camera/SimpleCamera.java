@@ -1,9 +1,11 @@
 package main.java.models.camera;
 
-import main.java.models.Matrix4f;
-import main.java.models.Quaternion;
-import main.java.models.Transform;
-import main.java.models.Vector4f;
+import main.java.models.matrix.Matrix4f;
+import main.java.models.matrix.Matrix4fBuilder;
+import main.java.models.scene.RenderableScene;
+import main.java.models.threedee.Quaternion;
+import main.java.models.threedee.Transform;
+import main.java.models.threedee.Vector4f;
 
 public class SimpleCamera extends AbstractCamera
 {
@@ -16,29 +18,38 @@ public class SimpleCamera extends AbstractCamera
     private Matrix4f m_projection;
     
 
-    private Transform getTransform()
+    public Transform getTransform()
     {
         return m_transform;
     }
-
+    protected SimpleCamera(SimpleCameraBuilder builder)
+    {
+        super(builder);
+        //set some more based on the builder.
+    }
+    SimpleCamera(RenderableScene scene)
+    {
+        super(scene);
+    }
+    /*
     public SimpleCamera(Matrix4f projection)
     {
         this.m_projection = projection;
         this.m_transform = new Transform();
     }
-
+    */
     public Matrix4f getViewProjection()
     {
-        Matrix4f cameraRotation = getTransform().getTransformedRot().Conjugate().toRotationMatrix();
-        Vector4f cameraPos = getTransform().getTransformedPos().mul(-1);
+        Matrix4f cameraRotation = getTransform().getTransformedRot().conjugate().toRotationMatrix();
+        Vector4f cameraPos = getTransform().getTransformedPos().multiply(-1);
 
-        Matrix4f cameraTranslation = new Matrix4f().initTranslation(cameraPos.getX(), cameraPos.getY(), cameraPos.getZ());
-        return m_projection.mul(cameraRotation.mul(cameraTranslation));
+        Matrix4f cameraTranslation = Matrix4fBuilder.getInstance().initTranslation(cameraPos.getX(), cameraPos.getY(), cameraPos.getZ());
+        return m_projection.mulitply(cameraRotation.mulitply(cameraTranslation));
     }
 
     private void move(Vector4f dir, float amt)
     {
-        m_transform = getTransform().setPos(getTransform().getPos().add(dir.mul(amt)));
+        m_transform = getTransform().setPos(getTransform().getPos().add(dir.multiply(amt)));
     }
 
     private void rotate(Vector4f axis, float angle)

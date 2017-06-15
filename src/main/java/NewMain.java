@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.java.models.ControlledScene;
 import main.java.models.NewInput;
+import main.java.models.camera.SimpleCameraBuilder;
 import main.java.view.SimpleDisplay;
 
 /**

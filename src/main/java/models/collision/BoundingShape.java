@@ -1,7 +1,7 @@
 package main.java.models.collision;
 
-import main.java.models.Transform;
-import main.java.models.Vector4f;
+import main.java.models.threedee.Transform;
+import main.java.models.threedee.Vector4f;
 
 
 /**

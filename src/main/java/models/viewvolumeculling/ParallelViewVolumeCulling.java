@@ -11,13 +11,12 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.java.models.collision.BoundingVolume;
-import main.java.models.Mesh;
+import main.java.models.newmodels.RenderableObject;
 
 /**
  * A culler that solves the cull problem in parallel using multiple threads and tasks.
  * 
  * @author Elwin Slokker
- * @since 0.2
  */
 public class ParallelViewVolumeCulling implements ViewVolumeCullInterface
 {
@@ -50,29 +49,28 @@ public class ParallelViewVolumeCulling implements ViewVolumeCullInterface
      * Makes a list with all meshes that intersect the provided {@code viewFrustum}.
      * 
      * @param volume
-     * @param meshes
+     * @param objects
      * @return a list with only the meshes that have intersecting bounding shapes
      * with the {@code viewFrustum}. The list order is not preserved (unstable).
-     * @since 0.1
      */
     @Override
-    public List<Mesh> meshesInsideViewFrustum(BoundingVolume volume, List<Mesh> meshes)
+    public List<RenderableObject> meshesInsideViewFrustum(BoundingVolume volume, List<RenderableObject> objects)
     {
         refreshThreads();
-        CompletionService<Mesh> pool = new ExecutorCompletionService<>(threadPool);
-        List<Mesh> visibleMeshes = new ArrayList<>();
-        for(Mesh mesh: meshes)
+        CompletionService<RenderableObject> pool = new ExecutorCompletionService<>(threadPool);
+        List<RenderableObject> visibleMeshes = new ArrayList<>();
+        for(RenderableObject object: objects)
         {
-            pool.submit(new VVCullingTask(volume, mesh));
+            pool.submit(new VVCullingTask(volume, object));
         }
-        for(Mesh mesh: meshes)
+        for(RenderableObject mesh: objects)
         {
             try
             {
-                Mesh meshRef = pool.take().get();
-                if(meshRef != null)
+                RenderableObject objectRef = pool.take().get();
+                if(objectRef != null)
                 {
-                    visibleMeshes.add(meshRef);
+                    visibleMeshes.add(objectRef);
                 }
             } catch (InterruptedException | ExecutionException ex)
             {

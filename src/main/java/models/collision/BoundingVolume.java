@@ -1,7 +1,7 @@
 
 package main.java.models.collision;
 
-import main.java.models.Vector4f;
+import main.java.models.threedee.Vector4f;
 import main.java.models.newmodels.Positionable;
 
 /**
@@ -22,7 +22,6 @@ public abstract class BoundingVolume implements Collidable, Positionable
     /**
      * 
      * @param position 
-     * @since 0.1
      */
     public BoundingVolume(Vector4f position)
     {
@@ -46,12 +45,10 @@ public abstract class BoundingVolume implements Collidable, Positionable
      * @param direction
      * @return the point that lies farthest away from the direction when the 
      * BoundingVolume is at (0,0,0) or <0,0,0,1>.
-     * @since 0.1
      */
     public abstract Vector4f getFurthestPointFromDirection(Vector4f direction);
     /**
      * {@inheritDoc}
-     * @since 0.1
      */
     @Override
     public void setPosition(Vector4f position)
@@ -60,7 +57,6 @@ public abstract class BoundingVolume implements Collidable, Positionable
     }
     /**
      * {@inheritDoc}
-     * @since 0.1
      */
     @Override
     public Vector4f getPosition()

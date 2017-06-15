@@ -78,7 +78,7 @@ public class Main
         //Mesh sofaMesh = new Mesh("./res/sofa.obj");
         Camera camera = new Camera(new Matrix4f().initPerspective((float) Math.toRadians(70.0f),
                 (float) target.getWidth() / (float) target.getHeight(), zNear, zFar));
-        //Camera camera = new Camera(new Matrix4f().InitOrthographic(-400, 400, -300, 300, zNear, zFar));
+        //Camera camera = new Camera(new Matrix4f().initOrthographic(-400, 400, -300, 300, zNear, zFar));
 
         //float rotCounter = 0.0f;
         long previousTime = System.nanoTime();

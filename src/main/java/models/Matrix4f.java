@@ -38,20 +38,20 @@ public class Matrix4f
     public Matrix4f initScreenSpaceTransform(float halfWidth, float halfHeight)
     {
         m[0][0] = halfWidth;
-        m[0][1] = 0;
-        m[0][2] = 0;
+        m[0][1] = 0;//skews 
+        m[0][2] = 0;//extremely weird displacement effect, causes OOB
         m[0][3] = halfWidth - 0.5f;
-        m[1][0] = 0;
+        m[1][0] = 0;//always OOB
         m[1][1] = -halfHeight;
-        m[1][2] = 0;
+        m[1][2] = 0;//always OOB
         m[1][3] = halfHeight - 0.5f;
-        m[2][0] = 0;
-        m[2][1] = 0;
+        m[2][0] = 0;//cripples some polygons and causes a painters algorithm like effect. (at high or low values)
+        m[2][1] = 0;//cripples some polygons and causes a painters algorithm like effect. (at high or low values)
         m[2][2] = 1;
-        m[2][3] = 0;
-        m[3][0] = 0;
-        m[3][1] = 0;
-        m[3][2] = 0;
+        m[2][3] = 0;//cripples some polygons and causes a painters algorithm like effect. (at high or low values)
+        m[3][0] = 0;//always OOB
+        m[3][1] = 0;//???
+        m[3][2] = 0;//weird
         m[3][3] = 1;
 
         return this;
@@ -194,21 +194,22 @@ public class Matrix4f
         float zRange = zNear - zFar;
 
         m[0][0] = 1.0f / (tanHalfFOV * aspectRatio);
-        m[0][1] = 0;
-        m[0][2] = 0;
-        m[0][3] = 0;
-        m[1][0] = 0;
+        m[0][1] = 0;//skews the geometry.
+        m[0][2] = 0;//weird distortion (like boundary break)
+        m[0][3] = 0;//shifts the camera left or right (but rotation arm also increases)
+        m[1][0] = 0;//rotates vision (like tilting camera)
         m[1][1] = 1.0f / tanHalfFOV;
-        m[1][2] = 0;
-        m[1][3] = 0;
-        m[2][0] = 0;
-        m[2][1] = 0;
+        m[1][2] = 0;//weird fov effects
+        m[1][3] = 0;//like [0][3] but for y axis
+        m[2][0] = 0;//creates a sort of black border and makes parallel worlds(x)
+        m[2][1] = 0;//creates a sort of black border and makes parallel worlds(y)
         m[2][2] = (-zNear - zFar) / zRange;
         m[2][3] = 2 * zFar * zNear / zRange;
-        m[3][0] = 0;
-        m[3][1] = 0;
-        m[3][2] = 1;
-        m[3][3] = 0;
+        m[3][0] = 0;//combines some distortions. Truly neausiating.(x?)
+        m[3][1] = 0;//combines some distortions. Truly neausiating.(y?)
+        m[3][2] = 1;//needs to 1.
+        m[3][3] = 0;//positive: makes zNear further away and looks like viewing from a distance. 
+                     //negative: seems to invert everything and lets you view things from the backside.
 
         return this;
     }

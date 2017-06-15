@@ -4,18 +4,14 @@ package main.java.models.newmodels;
 import main.java.models.threedee.Vector4f;
 
 /**
- * A positionable can be asked where it currently is in the 3D world.
+ * A Rotatable can be asked what direction it has in the 3D world.
  * 
  * @author Elwin Slokker
  * @version 0.1
  */
-public interface Positionable
+public interface Rotatable
 {
-    /**
-     * @return the position vector of the object.
-     * @version 0.1
-     */
-    public Vector4f getPosition();
+
     /**
      * 
      * @param position

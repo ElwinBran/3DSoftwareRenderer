@@ -2,12 +2,12 @@
 package main.java.models.newmodels;
 
 /**
- * 
+ * A scalable can be scaled.
  * 
  * @author Elwin Slokker
- * @version 0.0
+ * @version 0.1
  */
-public interface ObjectInterface
+public interface Scalable
 {
     
 }
