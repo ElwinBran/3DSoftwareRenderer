@@ -1,5 +1,3 @@
-package main.java.models;
-
 /*
  * Copyright (C) 2014 Benny Bobaganoosh
  *
@@ -15,10 +13,16 @@ package main.java.models;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package main.java.models.newmodels;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import main.java.models.threedee.Vector4f;
+/**
+ * 
+ * @author Elwin Slokker
+ * @author Benny Bobaganoosh
+ */
 public class IndexedModel
 {
     private List<Vector4f> m_positions;
@@ -44,10 +48,10 @@ public class IndexedModel
             int i1 = m_indices.get(i + 1);
             int i2 = m_indices.get(i + 2);
 
-            Vector4f v1 = m_positions.get(i1).sub(m_positions.get(i0));
-            Vector4f v2 = m_positions.get(i2).sub(m_positions.get(i0));
+            Vector4f v1 = m_positions.get(i1).subtract(m_positions.get(i0));
+            Vector4f v2 = m_positions.get(i2).subtract(m_positions.get(i0));
 
-            Vector4f normal = v1.cross(v2).normalized();
+            Vector4f normal = v1.crossProduct(v2).normalized();
 
             m_normals.set(i0, m_normals.get(i0).add(normal));
             m_normals.set(i1, m_normals.get(i1).add(normal));
@@ -68,8 +72,8 @@ public class IndexedModel
             int i1 = m_indices.get(i + 1);
             int i2 = m_indices.get(i + 2);
 
-            Vector4f edge1 = m_positions.get(i1).sub(m_positions.get(i0));
-            Vector4f edge2 = m_positions.get(i2).sub(m_positions.get(i0));
+            Vector4f edge1 = m_positions.get(i1).subtract(m_positions.get(i0));
+            Vector4f edge2 = m_positions.get(i2).subtract(m_positions.get(i0));
 
             float deltaU1 = m_texCoords.get(i1).getX() - m_texCoords.get(i0).getX();
             float deltaV1 = m_texCoords.get(i1).getY() - m_texCoords.get(i0).getY();

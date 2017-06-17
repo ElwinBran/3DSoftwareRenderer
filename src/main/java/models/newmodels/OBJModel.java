@@ -1,5 +1,4 @@
-package main.java.models;
-
+package main.java.models.newmodels;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,7 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-
+import main.java.models.threedee.Vector4f;
+/**
+ * 
+ * @author Elwin Slokker
+ * @author Benny Bobaganoosh
+ * @version 0.1
+ */
 public class OBJModel
 {
     private class OBJIndex

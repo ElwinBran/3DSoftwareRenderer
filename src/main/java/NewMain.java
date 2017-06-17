@@ -10,9 +10,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import main.java.models.ControlledScene;
-import main.java.models.NewInput;
-import main.java.models.camera.SimpleCameraBuilder;
+import main.java.controllers.NewInput;
+import main.java.fx.ControlledScene;
+import main.java.models.loop.AbstractLoop;
+import main.java.models.loop.SimpleRenderLoop;
 import main.java.view.SimpleDisplay;
 
 /**
@@ -69,11 +70,19 @@ public class NewMain extends Application
         WritableImage test = new WritableImage(width, height);
         final long startNanoTime = System.nanoTime();
         //Start loop
+        AbstractLoop loop = new SimpleRenderLoop(display);
+        //loop.addScene();
+        loop.start();
+        primaryStage.setScene(scene);
+        //primaryStage.setTitle();
+        primaryStage.show();
+        /*
         new AnimationTimer()
         {
             @Override
             public void handle(long currentNanoTime)
             {
+                double deltaTime = (currentNanoTime - startNanoTime) / 1000000000.0;
                 emptyImage(test);
                 
                 for(int c = 0; c < 100; c++)
@@ -82,20 +91,18 @@ public class NewMain extends Application
                 {
                     for(int y = 0; y < 200 - c; y++)
                     {
-                        test.getPixelWriter().setColor(x + 50, y + 50, Color.rgb(c, c, c));
+                        test.getPixelWriter().setColor(x + ((int)(deltaTime * 8) % 20), y + 50, Color.rgb(c, c, c));
                         //display.getCanvas().getGraphicsContext2D().getPixelWriter().setColor(x + 50, y + 50, Color.rgb(c, c, c));
                     }
                 }
                 }
                 display.getCanvas().getGraphicsContext2D().drawImage(test, 0.0, 0.0);
-                double deltaTime = (currentNanoTime - startNanoTime) / 1000000000.0;
+                
                 //cam.viewAndDisplay(world);
                 //cam.clearView();
             }
         }.start();
-        primaryStage.setScene(scene);
-        //primaryStage.setTitle();
-        primaryStage.show();
+        */
     }
     
     public static void main(String[] args)

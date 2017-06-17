@@ -19,4 +19,5 @@ public interface RenderableObject
     //get all polygons
     //get face in screenspace (projection_matrix, screenspace_matrix)
     public List<Polygon> getFacesInScreenSpace(Matrix4f projectionMatrix, Matrix4f screenSpace);
+    public Polygon getFaceInScreenSpace(int index, Matrix4f projectionMatrix, Matrix4f screenSpace);
 }

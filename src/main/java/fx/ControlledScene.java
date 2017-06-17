@@ -1,9 +1,11 @@
-package main.java.models;
+package main.java.fx;
 
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import main.java.controllers.NewInput;
+
 
 /**
  *
@@ -20,7 +22,7 @@ public class ControlledScene extends Scene
             @Override
             public void handle(KeyEvent event)
             {
-                input.execute(event.getCode());
+                //input.execute(event.getCode());
             }
         });
     }
