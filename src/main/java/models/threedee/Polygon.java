@@ -1,7 +1,8 @@
 package main.java.models.threedee;
 
 /**
- *
+ * A very crude class representing a 3-point polygon (triangle).
+ * 
  * @author Elwin Slokker
  * @version 0.1
  */

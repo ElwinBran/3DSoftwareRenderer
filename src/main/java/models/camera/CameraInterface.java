@@ -7,6 +7,7 @@ import main.java.models.threedee.Transform;
 import main.java.models.collision.BoundingVolume;
 import main.java.models.matrix.Matrix4f;
 import main.java.models.scene.RenderableScene;
+import main.java.models.threedee.Transformable;
 import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
 
 /**
@@ -17,7 +18,7 @@ import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
  * @author Elwin Slokker
  * @version 0.4
  */
-public interface CameraInterface
+public interface CameraInterface extends Transformable
 {
     /**
      * @return whether this camera is usable or not.
@@ -45,13 +46,17 @@ public interface CameraInterface
      */
     public CameraInterface setType(CameraType type);
     /**
-     * @return the transform of the camera.
+     * {@inheritDoc}
      */
+    @Override
     public Transform getTransform();
     /**
-     * Set the position and rotation of the camera (scale does nothing for a camera).
-     * @param transform
+     * Set the position and rotation of the camera.
+     * Scale might be used for the view of the camera, depending on the used implementations.
+     * 
+     * @param transform desired transformation.
      */
+    @Override
     public void setTransform(Transform transform);
     /**
      * @return the projection matrix this camera uses.

@@ -12,14 +12,14 @@ import main.java.models.newmodels.RenderableObject;
  * @author Elwin Slokker
  * @version 0.2
  */
-public interface RenderableScene
+public interface RenderableScene extends List<CameraInterface>
 {
-    public void addObject(RenderableObject object);
-    public void removeObject(RenderableObject object);
+    /**
+     * @return the list of objects (objects are not camera's and not lights) that this scene contains.
+     */
     public List<RenderableObject> getObjects();
+    /**
+     * @return the list of light-sources in this scene.s
+     */
     public List<LightInterface> getLights();
-    public void addCamera(CameraInterface camera);
-    public void addCamera(CameraInterface camera, int index);
-    public CameraInterface getCamera(int index);
-    public void removeCamera(CameraInterface camera);
 }

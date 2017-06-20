@@ -2,7 +2,7 @@
 package main.java.models.collision;
 
 import main.java.models.threedee.Vector4f;
-import main.java.models.newmodels.Positionable;
+import main.java.models.threedee.Positionable;
 
 /**
  * A BoundingVolume is a representation of any 3D shape that is able to collide 

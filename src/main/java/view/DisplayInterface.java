@@ -5,25 +5,23 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 
 /**
- *
+ * Defines the basic display behaviour.
+ * 
  * @author Elwin Slokker
  * @version 0.2
  */
 public interface DisplayInterface
 {
     /**
-     * 
-     * @return 
+     * @return the width of the display.
      */
     public int getWidth();
     /**
-     * 
-     * @return 
+     * @return the height of the display.
      */
     public int getHeight();
     /**
-     * 
-     * @return 
+     * @return a writer object that allows to change pixels on the display.
      */
     public PixelWriter getPixelWriter();
     /**

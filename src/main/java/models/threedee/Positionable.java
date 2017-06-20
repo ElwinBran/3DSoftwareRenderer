@@ -1,5 +1,5 @@
 
-package main.java.models.newmodels;
+package main.java.models.threedee;
 
 import main.java.models.threedee.Vector4f;
 

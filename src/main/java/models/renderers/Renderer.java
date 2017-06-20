@@ -11,6 +11,14 @@ import main.java.models.newmodels.RenderableObject;
 /**
  * Defines the methods every 3D renderer should have.
  * 
+ * TODO remove note:
+ * I should make a Map of the render actions.
+ * The renderer asks the object what type it is (will make an enum for that) 
+ * and then uses the map to call correct render method.
+ * 
+ * "what is your type?" -> "normal" (goes to normal render)
+ * "what is your type?" -> "mathematical volume" (goes volume render for spheres and ellipsoids)
+ * 
  * @author Elwin Slokker
  * @version 0.2
  */

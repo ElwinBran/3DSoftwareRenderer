@@ -1,5 +1,5 @@
 
-package main.java.models.newmodels;
+package main.java.models.threedee;
 
 /**
  * A scalable can be scaled.

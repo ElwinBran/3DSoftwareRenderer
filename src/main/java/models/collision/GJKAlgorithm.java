@@ -1,132 +1,115 @@
 package main.java.models.collision;
 
-
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import main.java.models.threedee.Vector4f;
 
 /**
  * Gilbert–Johnson–Keerthi algorithm.
  * 
+ * TODO it is still unfinished.
  * @author Elwin Slokker
+ * @version 0.3
  */
 public class GJKAlgorithm
 {
-    private static Vector4f a;
-    private static Vector4f b;
-    private static Vector4f c;
-    private static Vector4f d;
-    private static Vector4f vdir;
-    /**
-     *
-     */
-    private static int n;
-
-    public static boolean convexShapesIntersect(Shape3D convexShape1, Shape3D convexShape2)
+    public static boolean convexShapesIntersect(final Shape3D convexShapeOne, final Shape3D convexShapeTwo)
     {
+        final Map<PointMapping,Vector4f> simplex = new HashMap<>();//makeshift simplex object for performance.
         Vector4f dir = new Vector4f(1f, 1f, 1f);
+        
+        simplex.put(PointMapping.C, support(convexShapeOne, convexShapeTwo, dir));
+        dir = simplex.get(PointMapping.C).multiply(-1f);//negative direction
+        simplex.put(PointMapping.B, support(convexShapeOne, convexShapeTwo, dir));
 
-        c = support(convexShape1, convexShape2, dir);
-
-        dir = c.multiply(-1f);//negative direction
-
-        b = support(convexShape1, convexShape2, dir);
-
-        if (b.dotProduct(dir) < 0)
+        if (simplex.get(PointMapping.B).dotProduct(dir) < 0)
         {
             return false;
         }
-        dir = doubleCross(c.subtract(b), b.multiply(-1f));
+        dir = doubleCross(simplex.get(PointMapping.C).subtract(simplex.get(PointMapping.B)), simplex.get(PointMapping.B).multiply(-1f));
+        return loop(dir, simplex, convexShapeOne, convexShapeTwo);
+    }
 
-        n = 2; //begin with 2 points in simplex
+    public static boolean loop(Vector4f dir, Map<PointMapping, Vector4f> simplex, final Shape3D convexShapeOne, final Shape3D convexShapeTwo)
+    {
+        boolean condition = false;
 
-        int steps = 0;//avoid infinite loop
-        while (steps < 50)
+        final Vector4f[] direction = new Vector4f[1];
+        direction[0] = dir;
+        for(int i = 0; i < 50; i++)//prevent infinite loop.
         {
-            a = support(convexShape1, convexShape2, dir);
-            if (a.dotProduct(dir) < 0)
+            simplex.put(PointMapping.A, support(convexShapeOne, convexShapeTwo, direction[0]));
+            if (simplex.get(PointMapping.A).dotProduct(direction[0]) < 0)
             {
-                return false;
-            } else if (containsOrigin(dir))
+                break;
+            } else if (containsOrigin(direction, simplex))
             {
-                return true;
+                condition = true;
+                break;
             }
-            steps++;
-
         }
-
-        return false;
+        return condition;
+    }
+    
+    private static boolean containsOrigin(Vector4f[] direction, final Map<PointMapping,Vector4f> simplex)
+    {
+        switch(simplex.size() - 1) //the amount of keys -1 is equal to the dimesions of the simplex.
+        {
+            case(1): 
+                return line(direction, simplex);
+            case(2): 
+                return triangle(direction, simplex);
+            case(3): 
+                return tetrahedron(direction, simplex);
+            default: 
+                return false;
+        }
     }
 
-    private static boolean containsOrigin(Vector4f dir)
+    private static boolean line(Vector4f[] direction, final Map<PointMapping,Vector4f> simplex)
     {
-        /*if (n == 1)
-	 {
-		return line(a, dir);
-	 }*/
-
-        if (n == 2)
-        {
-            return triangle(dir);
-        } else if (n == 3)
-        {
-            return tetrahedron(dir);
-        }
-
-        return false;
-    }
-
-    private static boolean line(Vector4f dir)
-    {
-        Vector4f ab = b.subtract(a);
-        Vector4f ao = a.multiply(-1f);//vector3::zero() - a
+        Vector4f ab = simplex.get(PointMapping.B).subtract(simplex.get(PointMapping.A));
+        Vector4f ao = simplex.get(PointMapping.A).multiply(-1f);//vector3::zero() - a
 
         //can t be behind b;
         //new direction towards a0
-        dir = doubleCross(ab, ao);
+        direction[0] = doubleCross(ab, ao);//impure stuff
 
-        c = b;
-        b = a;
-        n = 2;
-
+        simplex.put(PointMapping.C,simplex.get(PointMapping.B));
+        simplex.put(PointMapping.B,simplex.get(PointMapping.A));
+        simplex.remove(PointMapping.D);//ensures a 2D simplex.
         return false;
     }
 
-    private static boolean triangle(Vector4f dir)
+    private static boolean triangle(Vector4f[] direction, final Map<PointMapping,Vector4f> simplex)
     {
-        Vector4f ao = new Vector4f(-a.getX(), -a.getY(), -a.getZ());
-        Vector4f ab = b.subtract(a);
-        Vector4f ac = c.subtract(a);
+        Vector4f ao = new Vector4f(-simplex.get(PointMapping.A).getX(), -simplex.get(PointMapping.A).getY(), -simplex.get(PointMapping.A).getZ());//??
+        Vector4f ab = simplex.get(PointMapping.B).subtract(simplex.get(PointMapping.A));
+        Vector4f ac = simplex.get(PointMapping.C).subtract(simplex.get(PointMapping.A));
         Vector4f abc = ab.crossProduct(ac);
 
         //point is can't be behind/in the direction of B,C or BC
-        Vector4f ab_abc = ab.crossProduct(abc);
         // is the origin away from ab edge? in the same plane
         //if a0 is in that direction than
-        if (ab_abc.dotProduct(ao) > 0)
+        if ((ab.crossProduct(abc)).dotProduct(ao) > 0)
         {
             //change points
-            c = b;
-            b = a;
-
+            simplex.put(PointMapping.C,simplex.get(PointMapping.B));
+            simplex.put(PointMapping.B,simplex.get(PointMapping.A));
             //dir is not ab_abc because it's not point towards the origin
-            dir = doubleCross(ab, ao);
-
+            direction[0] = doubleCross(ab, ao);
             //direction change; can't build tetrahedron
             return false;
         }
 
-        Vector4f abc_ac = abc.crossProduct(ac);
-
         // is the origin away from ac edge? or it is in abc?
         //if a0 is in that direction than
-        if (abc_ac.dotProduct(ao) > 0)
+        if ((abc.crossProduct(ac)).dotProduct(ao) > 0)
         {
             //keep c the same
-            b = a;
-
+            simplex.put(PointMapping.B,simplex.get(PointMapping.A));
             //dir is not abc_ac because it's not point towards the origin
-            dir = doubleCross(ac, ao);
-
+            direction[0] = doubleCross(ac, ao);
             //direction change; can't build tetrahedron
             return false;
         }
@@ -135,31 +118,27 @@ public class GJKAlgorithm
         if (abc.dotProduct(ao) > 0)
         {
             //base of tetrahedron
-            d = c;
-            c = b;
-            b = a;
+            simplex.put(PointMapping.D,simplex.get(PointMapping.C));
+            simplex.put(PointMapping.C,simplex.get(PointMapping.B));
+            simplex.put(PointMapping.B,simplex.get(PointMapping.A));
 
             //new direction
-            dir = abc;
+            direction[0] = abc;
         } else
         {
             //upside down tetrahedron
-            d = b;
-            b = a;
-            dir = abc.multiply(-1f);
+            simplex.put(PointMapping.D,simplex.get(PointMapping.B));
+            simplex.put(PointMapping.B,simplex.get(PointMapping.A));
+            direction[0] = abc.multiply(-1f);
         }
-
-        n = 3;
-
         return false;
     }
 
-    private static boolean tetrahedron(Vector4f dir)
+    private static boolean tetrahedron(Vector4f[] direction, final Map<PointMapping,Vector4f> simplex)
     {
-        Vector4f ao = a.multiply(-1f);//0-a
-        Vector4f ab = b.subtract(a);
-        Vector4f ac = c.subtract(a);
-
+        Vector4f ao = simplex.get(PointMapping.A).multiply(-1f);//0-a
+        Vector4f ab = simplex.get(PointMapping.B).subtract(simplex.get(PointMapping.A));
+        Vector4f ac = simplex.get(PointMapping.B).subtract(simplex.get(PointMapping.A));
         //build abc triangle
         Vector4f abc = ab.crossProduct(ac);
 
@@ -168,11 +147,11 @@ public class GJKAlgorithm
         {
             //in front of triangle ABC
             //we don't have to change the ao,ab,ac,abc meanings
-            checkTetrahedron(ao, ab, ac, abc, dir);
+            checkTetrahedron(ao, ab, ac, abc, direction, simplex);
         }
 
         //CASE 2:
-        Vector4f ad = d.subtract(a);
+        Vector4f ad = simplex.get(PointMapping.D).subtract(simplex.get(PointMapping.A));
 
         //build acd triangle
         Vector4f acd = ac.crossProduct(ad);
@@ -180,15 +159,13 @@ public class GJKAlgorithm
 	 //same direaction with ao
 	 if (acd.dotProduct(ao) > 0)
         {
-
             //in front of triangle ACD
-            b = c;
-            c = d;
+            simplex.put(PointMapping.B,simplex.get(PointMapping.C));
+            simplex.put(PointMapping.C,simplex.get(PointMapping.D));
             ab = ac;
             ac = ad;
             abc = acd;
-
-            return checkTetrahedron(ao, ab, ac, abc, dir);
+            return checkTetrahedron(ao, ab, ac, abc, direction, simplex);
         }
 
         //build adb triangle
@@ -198,42 +175,34 @@ public class GJKAlgorithm
         //same direaction with ao
         if (adb.dotProduct(ao) > 0)
         {
-
             //in front of triangle ADB
-            c = b;
-            b = d;
-
+            simplex.put(PointMapping.C,simplex.get(PointMapping.B));
+            simplex.put(PointMapping.B,simplex.get(PointMapping.D));
             ac = ab;
             ab = ad;
-
             abc = adb;
-            return checkTetrahedron(ao, ab, ac, abc, dir);
+            return checkTetrahedron(ao, ab, ac, abc, direction, simplex);
         }
-
         //origin in tetrahedron
         return true;
 
     }
 
-    private static boolean checkTetrahedron(Vector4f ao, Vector4f ab, Vector4f ac, Vector4f abc, Vector4f dir)
+    private static boolean checkTetrahedron(Vector4f ao, Vector4f ab, Vector4f ac, Vector4f abc, Vector4f[] direction, final Map<PointMapping,Vector4f> simplex)
     {
-
         //almost the same like triangle checks
         Vector4f ab_abc = ab.crossProduct(abc);
 
         if (ab_abc.dotProduct(ao) > 0)
         {
-            c = b;
-            b = a;
-
+            simplex.put(PointMapping.C,simplex.get(PointMapping.B));
+            simplex.put(PointMapping.B,simplex.get(PointMapping.A));
             //dir is not ab_abc because it's not point towards the origin;
             //ABxA0xAB direction we are looking for
-            dir = doubleCross(ab, ao);
-
+            direction[0] = doubleCross(ab, ao);
             //build new triangle
             // d will be lost
-            n = 2;
-
+            simplex.remove(PointMapping.D);
             return false;
         }
 
@@ -241,29 +210,23 @@ public class GJKAlgorithm
 
         if (acp.dotProduct(ao) > 0)
         {
-            b = a;
-
+            simplex.put(PointMapping.B,simplex.get(PointMapping.A));
             //dir is not abc_ac because it's not point towards the origin;
             //ACxA0xAC direction we are looking for
-            dir = doubleCross(ac, ao);
+            direction[0] = doubleCross(ac, ao);
             //ac x (ac x ao)
 
             //build new triangle
             // d will be lost
-            n = 2;
-
+            simplex.remove(PointMapping.D);
             return false;
         }
 
         //build new tetrahedron with new base
-        d = c;
-        c = b;
-        b = a;
-
-        dir = abc;
-
-        n = 3;
-
+        simplex.put(PointMapping.D,simplex.get(PointMapping.C));
+        simplex.put(PointMapping.C,simplex.get(PointMapping.B));
+        simplex.put(PointMapping.B,simplex.get(PointMapping.A));
+        direction[0] = abc;
         return false;
     }
 
@@ -277,6 +240,7 @@ public class GJKAlgorithm
     public static Vector4f support(Shape3D convexShape1, Shape3D convexShape2, Vector4f searchDirection)
     {
         /*
+        ORIGINAL CODE (?)
 	 Vector4f p1 = convexShape1.furthestPointFromDirection(searchDirection);
 	 Vector4f p2 = convexShape2.furthestPointFromDirection(new Vector4f(-searchDirection.GetX(), -searchDirection.GetY(), -searchDirection.GetZ()));
 
@@ -297,6 +261,13 @@ public class GJKAlgorithm
     public static Vector4f doubleCross(Vector4f vectorA, Vector4f vectorB)
     {
         return vectorA.crossProduct(vectorA.crossProduct(vectorB));
+    }
+    private static enum PointMapping
+    {
+        A,
+        B,
+        C,
+        D
     }
 }
 

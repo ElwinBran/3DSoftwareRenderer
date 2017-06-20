@@ -2,7 +2,6 @@
 package main.java.models.loop;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import main.java.models.scene.RenderableScene;
 import main.java.view.DisplayInterface;
 
 /**
@@ -29,7 +28,7 @@ public class SimpleRenderLoop extends AbstractLoop
     public void handle(long now)
     {
         //TODO this is not complete
-        super.getScenes().get(selectedSceneIndex.get()).getCamera(0).drawView(super.getDisplay().getPixelWriter());
+        super.getScenes().get(selectedSceneIndex.get()).get(0).drawView(super.getDisplay().getPixelWriter());
         //give the display the camera to render with or take pixel writer give it to camera...
     }
     public SimpleIntegerProperty getSelectedSceneIndex()
