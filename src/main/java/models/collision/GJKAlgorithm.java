@@ -9,11 +9,11 @@ import main.java.models.threedee.Vector4f;
  * 
  * TODO it is still unfinished.
  * @author Elwin Slokker
- * @version 0.3
+ * @version 0.4
  */
 public class GJKAlgorithm
 {
-    public static boolean convexShapesIntersect(final Shape3D convexShapeOne, final Shape3D convexShapeTwo)
+    public static boolean convexShapesIntersect(final GJKAble convexShapeOne, final GJKAble convexShapeTwo)
     {
         final Map<PointMapping,Vector4f> simplex = new HashMap<>();//makeshift simplex object for performance.
         Vector4f dir = new Vector4f(1f, 1f, 1f);
@@ -30,7 +30,7 @@ public class GJKAlgorithm
         return loop(dir, simplex, convexShapeOne, convexShapeTwo);
     }
 
-    public static boolean loop(Vector4f dir, Map<PointMapping, Vector4f> simplex, final Shape3D convexShapeOne, final Shape3D convexShapeTwo)
+    public static boolean loop(Vector4f dir, Map<PointMapping, Vector4f> simplex, final GJKAble convexShapeOne, final GJKAble convexShapeTwo)
     {
         boolean condition = false;
 
@@ -237,7 +237,7 @@ public class GJKAlgorithm
      * @param searchDirection
      * @return
      */
-    public static Vector4f support(Shape3D convexShape1, Shape3D convexShape2, Vector4f searchDirection)
+    public static Vector4f support(GJKAble convexShape1, GJKAble convexShape2, Vector4f searchDirection)
     {
         /*
         ORIGINAL CODE (?)

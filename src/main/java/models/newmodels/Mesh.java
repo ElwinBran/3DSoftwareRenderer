@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 import main.java.models.matrix.Matrix4f;
-import main.java.models.matrix.Matrix4fBuilder;
+import main.java.models.matrix.Matrix4fUtilities;
 import main.java.models.threedee.Polygon;
 import main.java.models.threedee.Transform;
 import main.java.models.threedee.Vertex;
@@ -39,7 +39,7 @@ public class Mesh
 
     public Polygon getFaceInScreenSpace(int index, Matrix4f projectionMatrix, Matrix4f screenSpace)
     {
-        Matrix4f identity = Matrix4fBuilder.getInstance().initIdentity();
+        Matrix4f identity = Matrix4fUtilities.initIdentity();
         return new Polygon(
                 vertices.get(indices.get(index)).transform(projectionMatrix, trans.getTransformation()).transform(screenSpace, identity).perspectiveDivide()
                 , vertices.get(indices.get(index + 1)).transform(projectionMatrix, trans.getTransformation()).transform(screenSpace, identity).perspectiveDivide()

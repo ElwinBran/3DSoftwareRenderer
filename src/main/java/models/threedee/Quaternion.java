@@ -165,7 +165,7 @@ public class Quaternion
         Vector4f up = new Vector4f(2.0f * (m_x * m_y + m_w * m_z), 1.0f - 2.0f * (m_x * m_x + m_z * m_z), 2.0f * (m_y * m_z - m_w * m_x));
         Vector4f right = new Vector4f(1.0f - 2.0f * (m_y * m_y + m_z * m_z), 2.0f * (m_x * m_y - m_w * m_z), 2.0f * (m_x * m_z + m_w * m_y));
 
-        return Matrix4fBuilder.getInstance().initRotation(forward, up, right);
+        return Matrix4fUtilities.initRotation(forward, up, right);
     }
 
     /**

@@ -12,8 +12,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.java.controllers.NewInput;
 import main.java.fx.ControlledScene;
+import main.java.models.camera.BaseCameraBuilder;
+import main.java.models.camera.CameraInterface;
+import main.java.models.camera.SimpleCamera;
+import main.java.models.camera.SimpleCameraBuilder;
 import main.java.models.loop.AbstractLoop;
 import main.java.models.loop.SimpleRenderLoop;
+import main.java.models.matrix.Matrix4f;
+import main.java.models.matrix.Matrix4fUtilities;
 import main.java.view.SimpleDisplay;
 
 /**
@@ -65,6 +71,8 @@ public class NewMain extends Application
         final int height = 400;
         SimpleDisplay display = new SimpleDisplay(width, height);
         Scene scene = new ControlledScene(display, new NewInput());
+        //TODO fix the stupid builders.
+        //CameraInterface cam = new SimpleCamera((BaseCameraBuilder)SimpleCameraBuilder.getBuilder().setScene(null));
         //TODO make sure the view (display) listens to the canvas contents.
         //bind the scene eventlisteners to the controller
         WritableImage test = new WritableImage(width, height);

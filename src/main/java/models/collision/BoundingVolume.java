@@ -13,7 +13,7 @@ import main.java.models.threedee.Positionable;
  * @author Elwin Slokker
  * @version 0.1
  */
-public abstract class BoundingVolume implements Collidable, Positionable
+public abstract class BoundingVolume implements Positionable, GJKAble
 {
     /**
      * The place of the BoundingVolume in the world/scene.

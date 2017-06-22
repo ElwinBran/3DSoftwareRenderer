@@ -4,39 +4,22 @@ package main.java.models.matrix;
 import main.java.models.threedee.Vector4f;
 
 /**
- * A singleton able to initialize matrices (for instance a perspective matrix).
+ * A helper class able to initialize matrices (for instance a perspective matrix)
+ * and some other actions as well.
  * It is based on the code of Benny Bobaganoosh. The matrix class contained all 
  * this code before, but that makes it harder to maintain.
  * 
  * @author Elwin Slokker
- * @version 0.1
+ * @version 0.2
  */
-public class Matrix4fBuilder
+public abstract class Matrix4fUtilities
 {
-    /**
-     * 
-     */
-    private static final Matrix4fBuilder INSTANCE = new Matrix4fBuilder();
-    /**
-     * Get the {@code Matrix4fBuilder} singleton.
-     * @return the builder.
-     */
-    public static Matrix4fBuilder getInstance()
-    {
-        return INSTANCE;
-    }
-    /**
-     * Hiding the constructor because the builder is a singleton.
-     */
-    private Matrix4fBuilder()
-    {    
-    }
     /**
      * Creates an empty matrix.
      * 
      * @return a new and empty {@code Matrix4f}.
      */
-    public Matrix4f initEmpty()
+    public static Matrix4f initEmpty()
     {
         return new Matrix4f();
     }
@@ -45,7 +28,7 @@ public class Matrix4fBuilder
      * 
      * @return a new identity matrix.
      */
-    public Matrix4f initIdentity()
+    public static Matrix4f initIdentity()
     {
         Matrix4f matrix = new Matrix4f();
         for(int m = 0; m < 4; m++)
@@ -68,7 +51,7 @@ public class Matrix4fBuilder
      * @param z
      * @return 
      */
-    public Matrix4f initTranslation(float x, float y, float z)
+    public static Matrix4f initTranslation(float x, float y, float z)
     {
         Matrix4f matrix = initIdentity();
         matrix.set(0, 3, x);
@@ -82,7 +65,7 @@ public class Matrix4fBuilder
      * @param halfHeight representing half the height of the screen.
      * @return 
      */
-    public Matrix4f initScreenSpaceTransform(float halfWidth, float halfHeight)
+    public static Matrix4f initScreenSpaceTransform(float halfWidth, float halfHeight)
     {
         Matrix4f matrix = new Matrix4f();
         matrix.set(0, 0, halfWidth);
@@ -111,7 +94,7 @@ public class Matrix4fBuilder
      * @param angle the amount of rotation, in radians.
      * @return 
      */
-    public Matrix4f initRotation(float x, float y, float z, float angle)
+    public static Matrix4f initRotation(float x, float y, float z, float angle)
     {
         float sin = (float) Math.sin(angle);
         float cos = (float) Math.cos(angle);
@@ -142,7 +125,7 @@ public class Matrix4fBuilder
      * @param z
      * @return 
      */
-    public Matrix4f initRotation(float x, float y, float z)
+    public static Matrix4f initRotation(float x, float y, float z)
     {
         Matrix4f rx = initIdentity();
         Matrix4f ry = initIdentity();
@@ -171,7 +154,7 @@ public class Matrix4fBuilder
      * @param z
      * @return 
      */
-    public Matrix4f initScale(float x, float y, float z)
+    public static Matrix4f initScale(float x, float y, float z)
     {
         Matrix4f matrix = new Matrix4f();
         matrix.set(0, 0, x);
@@ -180,14 +163,15 @@ public class Matrix4fBuilder
         return matrix;
     }
     /**
+     * Makes a matrix that transforms vectors in a perspective fashion.
      * 
-     * @param fov
-     * @param aspectRatio
-     * @param zNear
-     * @param zFar
+     * @param fov the angle representing the Field of view in radians.
+     * @param aspectRatio the aspect ratio of the screen.
+     * @param zNear the distance from the camera to the closest allowed 'z' value.
+     * @param zFar the distance from the camera to the farthest allowed 'z' value.
      * @return 
      */
-    public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
+    public static Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
     {
         Matrix4f matrix = new Matrix4f();
         float tanHalfFOV = (float) Math.tan(fov / 2);
@@ -211,8 +195,9 @@ public class Matrix4fBuilder
         return matrix;
     }
     /**
-     * Makes a matrix that transforms polyogons in a orthographic fashion.
+     * Makes a matrix that transforms vectors in a orthographic fashion.
      * TODO lessen the amount of parameters, 6 is too much!
+     * 
      * @param left
      * @param right
      * @param bottom
@@ -221,7 +206,7 @@ public class Matrix4fBuilder
      * @param far
      * @return 
      */
-    public Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far)
+    public static Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far)
     {
         float width = right - left;
         float height = top - bottom;
@@ -241,7 +226,7 @@ public class Matrix4fBuilder
      * @param up
      * @return 
      */
-    public Matrix4f initRotation(Vector4f forward, Vector4f up)
+    public static Matrix4f initRotation(Vector4f forward, Vector4f up)
     {
         Vector4f f = forward.normalized();
 
@@ -254,13 +239,14 @@ public class Matrix4fBuilder
     }
     
     /**
+     * Makes a rotation matrix from three direction vectors.
      * 
      * @param forward
      * @param up
      * @param right
      * @return 
      */
-    public Matrix4f initRotation(final Vector4f forward, final Vector4f up, final Vector4f right)
+    public static Matrix4f initRotation(final Vector4f forward, final Vector4f up, final Vector4f right)
     {
         //Vector4f f = forward;
         //Vector4f r = right;
@@ -284,5 +270,23 @@ public class Matrix4fBuilder
             }
         }
         return matrix;
+    }
+    /**
+     * 
+     * @param matrix a screenSpace transformation matrix. If it is anything else, results will be unpredictable.
+     * @return 
+     */
+    public static float getScreenWidth(Matrix4f matrix)
+    {
+        return matrix.get(0, 0) * 2;
+    }
+    /**
+     * 
+     * @param matrix a screenSpace transformation matrix. If it is anything else, results will be unpredictable.
+     * @return 
+     */
+    public static float getScreenHeight(Matrix4f matrix)
+    {
+        return matrix.get(1, 1) * -2;
     }
 }

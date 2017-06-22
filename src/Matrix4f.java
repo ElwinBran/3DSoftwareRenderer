@@ -117,7 +117,7 @@ public class Matrix4f
             m[3][0] = 0;//combines some distortions. Truly neausiating.(x?)
             m[3][1] = 0;//combines some distortions. Truly neausiating.(y?)
             m[3][2] = 1;//needs to 1.
-            m[3][3] = -0.5f;//positive: makes zNear further away and looks like viewing from a distance. 
+            m[3][3] = 0;//positive: makes zNear further away and looks like viewing from a distance. 
                          //negative: seems to invert everything and lets you view things from the backside.
 		return this;
 	}

@@ -42,14 +42,14 @@ public class Transform
 
     public Quaternion getLookAtRotation(Vector4f point, Vector4f up)
     {
-        return new Quaternion(Matrix4fBuilder.getInstance().initRotation(point.subtract(m_pos).normalized(), up));
+        return new Quaternion(Matrix4fUtilities.initRotation(point.subtract(m_pos).normalized(), up));
     }
 
     public Matrix4f getTransformation()
     {
-        Matrix4f translationMatrix = Matrix4fBuilder.getInstance().initTranslation(m_pos.getX(), m_pos.getY(), m_pos.getZ());
+        Matrix4f translationMatrix = Matrix4fUtilities.initTranslation(m_pos.getX(), m_pos.getY(), m_pos.getZ());
         Matrix4f rotationMatrix = m_rot.toRotationMatrix();
-        Matrix4f scaleMatrix = Matrix4fBuilder.getInstance().initScale(m_scale.getX(), m_scale.getY(), m_scale.getZ());
+        Matrix4f scaleMatrix = Matrix4fUtilities.initScale(m_scale.getX(), m_scale.getY(), m_scale.getZ());
 
         return translationMatrix.mulitply(rotationMatrix.mulitply(scaleMatrix));
     }

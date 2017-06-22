@@ -1,11 +1,13 @@
 
 package main.java.models.camera;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import main.java.models.threedee.Transform;
 import main.java.models.collision.BoundingVolume;
 import main.java.models.matrix.Matrix4f;
+import main.java.models.renderers.Renderer;
 import main.java.models.scene.RenderableScene;
 import main.java.models.threedee.Transformable;
 import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
@@ -16,13 +18,14 @@ import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
  * and to 'look' at them.
  * 
  * @author Elwin Slokker
- * @version 0.4
+ * @version 0.5
  */
 public interface CameraInterface extends Transformable
 {
     /**
      * @return whether this camera is usable or not.
      */
+    @Deprecated
     public boolean isUsable();
     /**
      * Allows to change the usability.
@@ -35,6 +38,10 @@ public interface CameraInterface extends Transformable
      * @return the scene that contains this camera.
      */
     public RenderableScene getScene();
+    /**
+     * @return the renderer this camera uses.
+     */
+    public Renderer getRenderer();
     /**
      * @return the type of camera (perspective, orthogonal and maybe more in later versions).
      */
@@ -93,8 +100,10 @@ public interface CameraInterface extends Transformable
      * TODO might become obsolete depending on later choices.
      * 
      * @param pixelWriter the writer the camera should use to output the image.
+     * @param shift if there is need to draw the view not at (0,0) use this 
+     * (negative shifts not allowed). shift != null, because the code will break.
      */
-    public void drawView(PixelWriter pixelWriter);
+    public void drawView(PixelWriter pixelWriter, Point2D shift);
     /**
      * The camera makes a 'picture' of what it is 'seeing' and draws it on an 
      * {@code Image}, which it returns.

@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
  * Provides an {@code ExecutorService} that has threads equal to the (virtual) processors of the systems CPU.
  * 
  * @author Elwin Slokker
- * @version 0.2
+ * @version 0.3
  */
 public class ThreadProvider
 {
@@ -36,7 +36,7 @@ public class ThreadProvider
     /**
      * Makes new threads when the old ones are shut down.
      */
-    private void refreshThreads()
+    public void refreshThreads()
     {
         if (threadPool.isShutdown())
         {

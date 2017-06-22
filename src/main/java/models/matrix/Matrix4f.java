@@ -116,6 +116,20 @@ public class Matrix4f implements Cloneable
         m[x][y] = value;
     }
     /**
+     * 
+     * @return 
+     */
+    public float determinant()
+    {
+        float determinant = 0;
+        for(int y = 0; y < WIDTH; y++)
+        {
+            determinant += (y % 2 == 0? 1: -1) * //alternating + and - signs.
+                    (m[0][y] * (new Matrix3f(this, y)).determinant());
+        }
+        return determinant;
+    }
+    /**
      * Creates a copy of this matrix.
      * Since {@code Matrix4f} is immutable, this might be necessary.
      * 

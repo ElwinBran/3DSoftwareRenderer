@@ -2,37 +2,30 @@
 package main.java.models.viewvolumeculling;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import main.java.models.collision.BoundingVolume;
 import main.java.models.newmodels.RenderableObject;
+import main.java.util.ThreadProvider;
 
 /**
  * A culler that solves the cull problem in parallel using multiple threads and tasks.
  * 
  * @author Elwin Slokker
+ * @version 0.2
  */
 public class ParallelViewVolumeCulling implements ViewVolumeCullInterface
 {
     /**
      * The culler needs multiple threads.
      */
-    private ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    /**
-     * Closes the threads the solver uses.
-     *
-     * Should be called when the solver is not needed for a long period of time.
-     * Or when it is not going to be used anymore.
-     */
+    private ThreadProvider threadProvider = new ThreadProvider();
     public void closeThreads()
     {
-        threadPool.shutdown();
+        threadProvider.getTreadPool().shutdown();
     }
     /**
      * Checks if the thread has not been shut down. If it is shut down, a new
@@ -40,10 +33,7 @@ public class ParallelViewVolumeCulling implements ViewVolumeCullInterface
      */
     private void refreshThreads()
     {
-        if (threadPool.isShutdown())
-        {
-            threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        }
+        threadProvider.refreshThreads();
     }
     /**
      * Makes a list with all meshes that intersect the provided {@code viewFrustum}.
@@ -57,28 +47,24 @@ public class ParallelViewVolumeCulling implements ViewVolumeCullInterface
     public List<RenderableObject> meshesInsideViewFrustum(BoundingVolume volume, List<RenderableObject> objects)
     {
         refreshThreads();
-        CompletionService<RenderableObject> pool = new ExecutorCompletionService<>(threadPool);
-        List<RenderableObject> visibleMeshes = new ArrayList<>();
+        CompletionService<Boolean> pool = new ExecutorCompletionService<>(threadProvider.getTreadPool());
+        List<RenderableObject> visibleMeshes = Collections.synchronizedList(new ArrayList<>());
         for(RenderableObject object: objects)
         {
-            pool.submit(new VVCullingTask(volume, object));
+            pool.submit(new VVCullingTask(volume, object, visibleMeshes));
         }
         for(RenderableObject mesh: objects)
         {
             try
             {
-                RenderableObject objectRef = pool.take().get();
-                if(objectRef != null)
-                {
-                    visibleMeshes.add(objectRef);
-                }
+                pool.take().get();//returns true on success, might want to use that.
             } catch (InterruptedException | ExecutionException ex)
             {
                 //Should not throw any exception actually.
-                Logger.getLogger(ParallelViewVolumeCulling.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(ParallelViewVolumeCulling.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
         }
         return visibleMeshes;
     }
-    
 }

@@ -1,10 +1,5 @@
 package main.java.models.camera;
 
-import main.java.models.camera.builderinterfaces.SceneSetter;
-import main.java.models.camera.builderinterfaces.TransformSetter;
-import main.java.models.camera.builderinterfaces.TypeSetter;
-import main.java.models.camera.builderinterfaces.ViewVolumeCullerSetter;
-import main.java.models.camera.builderinterfaces.ViewVolumeSetter;
 import main.java.models.collision.BoundingVolume;
 import main.java.models.scene.RenderableScene;
 import main.java.models.threedee.Transform;
@@ -14,15 +9,11 @@ import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
  * Builds a {@code AbstractCamera}.
  * 
  * @author Elwin Slokker
- * @version 0.2
- * @param <C> The type of the camera.
- * @param <L> The interface type that the builder will be casted to after the 
- * last method (so a class extending this one may complete the building).
+ * @version 0.3
+ * @param <B>
  */
-public class BaseCameraBuilder<C extends AbstractCamera, L> implements  SceneSetter<L>,
-        TypeSetter<L>, TransformSetter<L>, ViewVolumeSetter<L>, ViewVolumeCullerSetter<L>
+public class BaseCameraBuilder<B extends BaseCameraBuilder>
 {
-    protected C camera;
     
     boolean isUsable = false;
     ViewVolumeCullInterface viewVolumeCuller;
@@ -33,47 +24,31 @@ public class BaseCameraBuilder<C extends AbstractCamera, L> implements  SceneSet
     
     protected BaseCameraBuilder()
     {
+        
     }
-    /**
-     * Sets the scene that contains the camera. Followed by {@link setType}.
-     * 
-     * @param scene
-     * @return 
-     */
-    @Override
-    public TypeSetter<L> setScene(RenderableScene scene)
+    public B setVVCuller(ViewVolumeCullInterface viewVolumeCuller)
     {
-        //getCamera().setScene(scene);
-        return this;
+        this.viewVolumeCuller = viewVolumeCuller;
+        return (B)this;
     }
-
-    @Override
-    public TransformSetter<L> setType(CameraType type)
+    public B setScene(RenderableScene scene)
     {
-        //getCamera().setType(type);
-        return this;
+        this.containerScene = scene;
+        return (B)this;
     }
-
-    @Override
-    public ViewVolumeSetter<L> setTransfrom(Transform transform)
+    public B setType(CameraType type)
     {
-        //getCamera().setTransform(transform);
-        return this;
+        this.type = type;
+        return (B)this;
     }
-
-    @Override
-    public ViewVolumeCullerSetter<L> setViewVolume(BoundingVolume volume)
+    public B setViewVolume(BoundingVolume boundingViewVolume)
     {
-        //getCamera().setViewBoundingVolume(volume);
-        return this;
+        this.boundingViewVolume = boundingViewVolume;
+        return (B)this;
     }
-
-    
-    @Override
-    public L setViewVolumeCull(ViewVolumeCullInterface culler)
+    public B setTransform(Transform transform)
     {
-        //getCamera().setViewVolumeCuller(culler);
-        return (L)this;
+        this.transform = transform;
+        return (B)this;
     }
-
 }

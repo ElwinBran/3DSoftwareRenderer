@@ -2,6 +2,7 @@
 package main.java.models.loop;
 
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Point2D;
 import main.java.view.DisplayInterface;
 
 /**
@@ -10,7 +11,7 @@ import main.java.view.DisplayInterface;
  * The only control one has on this loop is being able to change the scene.
  * 
  * @author Elwin Slokker
- * @version 0.2
+ * @version 0.3
  */
 public class SimpleRenderLoop extends AbstractLoop
 {
@@ -28,7 +29,7 @@ public class SimpleRenderLoop extends AbstractLoop
     public void handle(long now)
     {
         //TODO this is not complete
-        super.getScenes().get(selectedSceneIndex.get()).get(0).drawView(super.getDisplay().getPixelWriter());
+        super.getScenes().get(selectedSceneIndex.get()).get(0).drawView(super.getDisplay().getPixelWriter(), new Point2D(0,0));
         //give the display the camera to render with or take pixel writer give it to camera...
     }
     public SimpleIntegerProperty getSelectedSceneIndex()
