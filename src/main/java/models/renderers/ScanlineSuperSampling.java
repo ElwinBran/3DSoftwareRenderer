@@ -8,12 +8,12 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import main.java.models.camera.CameraInterface;
-import main.java.models.matrix.Matrix4fUtilities;
-import main.java.models.newmodels.RenderableObject;
+import main.java.models.threedee.matrix.Matrix4fUtilities;
+import main.java.models.threedee.objects.RenderableObject;
 import main.java.util.ColorUtil;
 
 /**
- * A scanline renderer that uses super sampling.
+ * A scanline renderer that uses super sampling (FSAA).
  * 
  * @author Elwin Slokker
  * @version 0.1

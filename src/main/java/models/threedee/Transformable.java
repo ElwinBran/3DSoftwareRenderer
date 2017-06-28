@@ -2,7 +2,7 @@
 package main.java.models.threedee;
 
 /**
- * Can be translated (moved), rotated and scaled.
+ * Can be translated (= moved), rotated and scaled.
  * 
  * @author Elwin Slokker
  * @version 0.1
@@ -13,7 +13,7 @@ public interface Transformable
      * Set the transform (translation, rotation, scale).
      * @param transform
      */
-    public void setTransform(Transform transform);
+    public void setTransform(final Transform transform);
     /**
      * @return the transform of {@code this} Object.
      */

@@ -6,7 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import main.java.models.camera.CameraInterface;
-import main.java.models.newmodels.RenderableObject;
+import main.java.models.threedee.objects.RenderableObject;
 
 /**
  * Defines the methods every 3D renderer should have.
@@ -20,10 +20,20 @@ import main.java.models.newmodels.RenderableObject;
  * "what is your type?" -> "mathematical volume" (goes volume render for spheres and ellipsoids)
  * 
  * @author Elwin Slokker
- * @version 0.2
+ * @version 0.3
  */
 public interface Renderer
 {
+    /**
+     * When determining the color of a pixel, it is important to check the exact center of the pixel.
+     * this is the x center value.
+     */
+    public final static float X_PIXEL_CORRECTION = 0.5f;
+    /**
+     * When determining the color of a pixel, it is important to check the exact center of the pixel.
+     * this is the y center value.
+     */
+    public final static float Y_PIXEL_CORRECTION = 0.5f;
     /**
      * Renders the {@code objects} directly through the {@code writer}, displaced by the {@code shift}.
      * 

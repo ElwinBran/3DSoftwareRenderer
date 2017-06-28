@@ -1,4 +1,4 @@
-package main.java.models.collision;
+package main.java.models.threedee.collision;
 
 import java.util.HashMap;
 import java.util.Map;

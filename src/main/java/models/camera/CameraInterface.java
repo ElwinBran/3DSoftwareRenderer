@@ -5,11 +5,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import main.java.models.threedee.Transform;
-import main.java.models.collision.BoundingVolume;
-import main.java.models.matrix.Matrix4f;
+import main.java.models.threedee.collision.BoundingVolumeInterface;
+import main.java.models.threedee.matrix.Matrix4f;
 import main.java.models.renderers.Renderer;
 import main.java.models.scene.RenderableScene;
 import main.java.models.threedee.Transformable;
+import main.java.models.threedee.Vector4f;
 import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
 
 /**
@@ -18,22 +19,20 @@ import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
  * and to 'look' at them.
  * 
  * @author Elwin Slokker
- * @version 0.5
+ * @version 0.6
  */
 public interface CameraInterface extends Transformable
 {
     /**
-     * @return whether this camera is usable or not.
+     * @return a vector containing the eye position in relation to the screen  (the upper-left corner being (0,0,0)).
      */
-    @Deprecated
-    public boolean isUsable();
+    public Vector4f getEyePosition();
     /**
-     * Allows to change the usability.
+     * Change the eye position and update the projection methods as well.
      * 
-     * @param isUsable
+     * @param position 
      */
-    @Deprecated
-    public void setUsable(boolean isUsable);
+    public void setEyePosition(Vector4f position);
     /**
      * @return the scene that contains this camera.
      */
@@ -87,13 +86,13 @@ public interface CameraInterface extends Transformable
      * @return the {@code BoundingVolume} assigned to this camera (what it uses 
      * to cull).
      */
-    public BoundingVolume getViewBoundingVolume();
+    public BoundingVolumeInterface getViewBoundingVolume();
     /**
      * Sets the volume the camera uses to cull.
      * 
      * @param volume a new {@code BoundingVolume}.
      */
-    public void setViewBoundingVolume(BoundingVolume volume);
+    public void setViewBoundingVolume(BoundingVolumeInterface volume);
     /**
      * The camera makes a 'picture' of what it is 'seeing' and draws it with the
      * {@code pixelWriter}.

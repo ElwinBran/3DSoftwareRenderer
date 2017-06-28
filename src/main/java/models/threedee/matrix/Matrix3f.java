@@ -1,4 +1,4 @@
-package main.java.models.matrix;
+package main.java.models.threedee.matrix;
 
 /**
  * Represents a mathematical 3x3 matrix where every value is a {@code float}. It

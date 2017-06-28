@@ -1,4 +1,4 @@
-package main.java.models.matrix;
+package main.java.models.threedee.matrix;
 
 import main.java.models.threedee.Vector4f;
 /**
@@ -138,9 +138,9 @@ public class Matrix4f implements Cloneable
     public Matrix4f clone()
     {
         Matrix4f matrix = new Matrix4f();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < WIDTH; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < HEIGHT; j++)
             {
                 matrix.set(i, j, this.get(i, j));
             }

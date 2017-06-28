@@ -29,7 +29,7 @@ public class SimpleRenderLoop extends AbstractLoop
     public void handle(long now)
     {
         //TODO this is not complete
-        super.getScenes().get(selectedSceneIndex.get()).get(0).drawView(super.getDisplay().getPixelWriter(), new Point2D(0,0));
+        super.getScenes().get(selectedSceneIndex.get()).getCamera(0).drawView(super.getDisplay().getPixelWriter(), new Point2D(0,0));
         //give the display the camera to render with or take pixel writer give it to camera...
     }
     public SimpleIntegerProperty getSelectedSceneIndex()

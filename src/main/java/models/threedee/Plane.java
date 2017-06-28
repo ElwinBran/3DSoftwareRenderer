@@ -6,6 +6,7 @@ package main.java.models.threedee;
  * Plane equation: ax + by + cz + d = 0
  *
  * @author Elwin Slokker
+ * @version 0.2
  */
 public class Plane
 {
@@ -57,8 +58,9 @@ public class Plane
      */
     public Plane(final float a, final float b, final float c, final float d)
     {
-        this.d = d / (new Vector4f(a, b, c, 0.0f)).length();
-        this.planeNormal = new Vector4f(a, b, c, 0.0f).normalized();
+        Vector4f temp = new Vector4f(a, b, c, 0.0f);
+        this.d = d / temp.length();
+        this.planeNormal = temp.normalized();
     }
 
     /**

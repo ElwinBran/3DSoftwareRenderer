@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
-import main.java.models.collision.BoundingVolume;
-import main.java.models.newmodels.RenderableObject;
+import main.java.models.threedee.collision.BoundingVolumeInterface;
+import main.java.models.threedee.objects.RenderableObject;
 import main.java.util.ThreadProvider;
 
 /**
  * A culler that solves the cull problem in parallel using multiple threads and tasks.
  * 
  * @author Elwin Slokker
- * @version 0.2
+ * @version 0.3
  */
 public class ParallelViewVolumeCulling implements ViewVolumeCullInterface
 {
@@ -44,7 +44,7 @@ public class ParallelViewVolumeCulling implements ViewVolumeCullInterface
      * with the {@code viewFrustum}. The list order is not preserved (unstable).
      */
     @Override
-    public List<RenderableObject> meshesInsideViewFrustum(BoundingVolume volume, List<RenderableObject> objects)
+    public List<RenderableObject> meshesInsideViewFrustum(BoundingVolumeInterface volume, List<RenderableObject> objects)
     {
         refreshThreads();
         CompletionService<Boolean> pool = new ExecutorCompletionService<>(threadProvider.getTreadPool());

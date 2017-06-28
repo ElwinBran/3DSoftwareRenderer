@@ -1,4 +1,4 @@
-package main.java.models.newmodels;
+package main.java.models.threedee.objects;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

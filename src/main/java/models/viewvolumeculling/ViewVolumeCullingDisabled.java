@@ -2,14 +2,14 @@
 package main.java.models.viewvolumeculling;
 
 import java.util.List;
-import main.java.models.collision.BoundingVolume;
-import main.java.models.newmodels.RenderableObject;
+import main.java.models.threedee.collision.BoundingVolumeInterface;
+import main.java.models.threedee.objects.RenderableObject;
 
 /**
  * Represents a culler that actually does not cull.
  * 
  * @author Elwin Slokker
- * @version 0.2
+ * @version 0.3
  */
 public class ViewVolumeCullingDisabled implements ViewVolumeCullInterface
 {
@@ -21,7 +21,7 @@ public class ViewVolumeCullingDisabled implements ViewVolumeCullInterface
      * @return {@code meshes}.
      */
     @Override
-    public List<RenderableObject> meshesInsideViewFrustum(BoundingVolume volume, List<RenderableObject> meshes)
+    public List<RenderableObject> meshesInsideViewFrustum(BoundingVolumeInterface volume, List<RenderableObject> meshes)
     {
         return meshes;
     }

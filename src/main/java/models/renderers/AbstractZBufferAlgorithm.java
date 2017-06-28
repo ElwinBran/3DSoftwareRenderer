@@ -6,9 +6,9 @@ package main.java.models.renderers;
  * Provides a buffer for the children.
  * 
  * @author Elwin Slokker
- * @version 0.1
+ * @version 0.2
  */
-public abstract class AbstractZBufferAlgorithm implements Renderer
+public abstract class AbstractZBufferAlgorithm extends AbstractRenderer
 {
     private short width;
     public int getWidth()
@@ -40,6 +40,9 @@ public abstract class AbstractZBufferAlgorithm implements Renderer
         this.zBuffer = new float[width][height];
         clearDepthBuffer();
     }
+    /**
+     * Resets the Z-Buffer.
+     */
     public void clearDepthBuffer()
     {
         for(short x = 0; x < this.width; x++)

@@ -1,5 +1,5 @@
 
-package main.java.models.matrix;
+package main.java.models.threedee.matrix;
 
 import main.java.models.threedee.Vector4f;
 
@@ -10,7 +10,7 @@ import main.java.models.threedee.Vector4f;
  * this code before, but that makes it harder to maintain.
  * 
  * @author Elwin Slokker
- * @version 0.2
+ * @version 0.3
  */
 public abstract class Matrix4fUtilities
 {
@@ -31,9 +31,9 @@ public abstract class Matrix4fUtilities
     public static Matrix4f initIdentity()
     {
         Matrix4f matrix = new Matrix4f();
-        for(int m = 0; m < 4; m++)
+        for(int m = 0; m < Matrix4f.WIDTH; m++)
         {
-            for(int n = 0; n < 4; n++)
+            for(int n = 0; n < Matrix4f.HEIGHT; n++)
             {
                 matrix.set(n, m,
                         //set to 1 in a diagonal line.
@@ -51,9 +51,9 @@ public abstract class Matrix4fUtilities
      * @param z
      * @return 
      */
-    public static Matrix4f initTranslation(float x, float y, float z)
+    public static Matrix4f initTranslation(final float x, final float y, final float z)
     {
-        Matrix4f matrix = initIdentity();
+        final Matrix4f matrix = initIdentity();
         matrix.set(0, 3, x);
         matrix.set(1, 3, y);
         matrix.set(2, 3, z);
@@ -65,9 +65,9 @@ public abstract class Matrix4fUtilities
      * @param halfHeight representing half the height of the screen.
      * @return 
      */
-    public static Matrix4f initScreenSpaceTransform(float halfWidth, float halfHeight)
+    public static Matrix4f initScreenSpaceTransform(final float halfWidth, final float halfHeight)
     {
-        Matrix4f matrix = new Matrix4f();
+        final Matrix4f matrix = new Matrix4f();
         matrix.set(0, 0, halfWidth);
         matrix.set(0, 1, 0);
         matrix.set(0, 2, 0);
@@ -94,11 +94,11 @@ public abstract class Matrix4fUtilities
      * @param angle the amount of rotation, in radians.
      * @return 
      */
-    public static Matrix4f initRotation(float x, float y, float z, float angle)
+    public static Matrix4f initRotation(final float x, final float y, final float z, final float angle)
     {
-        float sin = (float) Math.sin(angle);
-        float cos = (float) Math.cos(angle);
-        Matrix4f matrix = new Matrix4f();
+        final float sin = (float) Math.sin(angle);
+        final float cos = (float) Math.cos(angle);
+        final Matrix4f matrix = new Matrix4f();
         matrix.set(0, 0, cos + x * x * (1 - cos));
         matrix.set(0, 1, x * y * (1 - cos) - z * sin);
         matrix.set(0, 2, x * z * (1 - cos) + y * sin);
@@ -125,11 +125,11 @@ public abstract class Matrix4fUtilities
      * @param z
      * @return 
      */
-    public static Matrix4f initRotation(float x, float y, float z)
+    public static Matrix4f initRotation(final float x, final float y, final float z)
     {
-        Matrix4f rx = initIdentity();
-        Matrix4f ry = initIdentity();
-        Matrix4f rz = initIdentity();
+        final Matrix4f rx = initIdentity();
+        final Matrix4f ry = initIdentity();
+        final Matrix4f rz = initIdentity();
         rz.set(0, 0, (float) Math.cos(z));
         rz.set(0, 1, -(float) Math.sin(z));
         rz.set(1, 0, (float) Math.sin(z));
@@ -154,9 +154,9 @@ public abstract class Matrix4fUtilities
      * @param z
      * @return 
      */
-    public static Matrix4f initScale(float x, float y, float z)
+    public static Matrix4f initScale(final float x, final float y, final float z)
     {
-        Matrix4f matrix = new Matrix4f();
+        final Matrix4f matrix = new Matrix4f();
         matrix.set(0, 0, x);
         matrix.set(1, 1, y);
         matrix.set(2, 2, z);
@@ -171,11 +171,11 @@ public abstract class Matrix4fUtilities
      * @param zFar the distance from the camera to the farthest allowed 'z' value.
      * @return 
      */
-    public static Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
+    public static Matrix4f initPerspective(final float fov, final float aspectRatio, final float zNear, final float zFar)
     {
-        Matrix4f matrix = new Matrix4f();
-        float tanHalfFOV = (float) Math.tan(fov / 2);
-        float zRange = zNear - zFar;
+        final Matrix4f matrix = new Matrix4f();
+        final float tanHalfFOV = (float) Math.tan(fov / 2);
+        final float zRange = zNear - zFar;
         matrix.set(0, 0, 1.0f / (tanHalfFOV * aspectRatio));
         matrix.set(0, 1, 0);
         matrix.set(0, 2, 0);
@@ -206,12 +206,13 @@ public abstract class Matrix4fUtilities
      * @param far
      * @return 
      */
-    public static Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far)
+    public static Matrix4f initOrthographic(final float left, final float right, final float bottom,
+            final float top, final float near, final float far)
     {
-        float width = right - left;
-        float height = top - bottom;
-        float depth = far - near;
-        Matrix4f matrix = initIdentity();
+        final float width = right - left;
+        final float height = top - bottom;
+        final float depth = far - near;
+        final Matrix4f matrix = initIdentity();
         matrix.set(0, 0, 2 / width);
         matrix.set(0, 3, -(right + left) / width);
         matrix.set(1, 1, 2 / height);
@@ -274,7 +275,7 @@ public abstract class Matrix4fUtilities
     /**
      * 
      * @param matrix a screenSpace transformation matrix. If it is anything else, results will be unpredictable.
-     * @return 
+     * @return the width contained in this matrix.
      */
     public static float getScreenWidth(Matrix4f matrix)
     {
@@ -283,7 +284,7 @@ public abstract class Matrix4fUtilities
     /**
      * 
      * @param matrix a screenSpace transformation matrix. If it is anything else, results will be unpredictable.
-     * @return 
+     * @return the height contained in this matrix.
      */
     public static float getScreenHeight(Matrix4f matrix)
     {

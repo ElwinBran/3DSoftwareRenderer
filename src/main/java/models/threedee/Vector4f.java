@@ -2,7 +2,8 @@ package main.java.models.threedee;
 
 /**
  * Represents a 4 dimensional vector consisting of 32-bit floating point numbers.
- * This object is immutable and every operation will return a new vector or a float number.
+ * This object is immutable and every operation that would change internal values
+ * will return a new vector or a float number.
  * 
  * @author Elwin Slokker
  * @author Benny Bobaganoosh

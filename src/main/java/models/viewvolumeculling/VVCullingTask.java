@@ -3,19 +3,19 @@ package main.java.models.viewvolumeculling;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-import main.java.models.collision.BoundingVolume;
-import main.java.models.collision.GJKAlgorithm;
-import main.java.models.newmodels.RenderableObject;
+import main.java.models.threedee.collision.BoundingVolumeInterface;
+import main.java.models.threedee.collision.GJKAlgorithm;
+import main.java.models.threedee.objects.RenderableObject;
 
 /**
  * Can be used to Cull objects outside the view volume in parallel.
  * 
  * @author Elwin Slokker
- * @version 0.3
+ * @version 0.4
  */
 public class VVCullingTask implements Callable<Boolean>
 {
-    private final BoundingVolume volume;
+    private final BoundingVolumeInterface volume;
     private final RenderableObject object;
     private final List<RenderableObject> visibleObjects;
     
@@ -24,7 +24,7 @@ public class VVCullingTask implements Callable<Boolean>
      * @param volume
      * @param object 
      */
-    public VVCullingTask(BoundingVolume volume, RenderableObject object, List<RenderableObject> visibleObjects)
+    public VVCullingTask(BoundingVolumeInterface volume, RenderableObject object, List<RenderableObject> visibleObjects)
     {
         this.volume = volume;
         this.object = object;

@@ -1,6 +1,7 @@
 package main.java.models.threedee;
 
-import main.java.models.matrix.*;
+import main.java.models.threedee.matrix.Matrix4fUtilities;
+import main.java.models.threedee.matrix.Matrix4f;
 
 
 /**

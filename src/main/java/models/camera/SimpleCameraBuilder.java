@@ -6,22 +6,23 @@ package main.java.models.camera;
  * Is able to build a {@see main.java.models.camera.SimpleCamera}.
  * 
  * @author Elwin Slokker
- * @version 0.2
- * @param <B> the builder type.
+ * @version 0.3
  */
-public class SimpleCameraBuilder<B extends SimpleCameraBuilder> extends BaseCameraBuilder<B>
+public class SimpleCameraBuilder extends BaseCameraBuilder<SimpleCamera>
 {   
-    public static SimpleCameraBuilder getBuilder()
+    /**
+     * Simply creates a builder to use.
+     */
+    public SimpleCameraBuilder()
     {
-        return new SimpleCameraBuilder<>();
     }
-    protected SimpleCameraBuilder()
+
+    /**
+     * @return a {@see main.java.models.camera.SimpleCamera} object. Should be called after specifying the base builder values.
+     */
+    @Override
+    public SimpleCamera build()
     {
-    }
-    
-    @Deprecated
-    public void test()
-    {
-        
+        return new SimpleCamera(this);
     }
 }

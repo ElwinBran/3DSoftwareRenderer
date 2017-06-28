@@ -8,7 +8,8 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import main.java.models.camera.CameraInterface;
-import main.java.models.newmodels.RenderableObject;
+import main.java.models.threedee.matrix.Matrix4fUtilities;
+import main.java.models.threedee.objects.RenderableObject;
 import main.java.models.threedee.Polygon;
 import main.java.models.threedee.Vector4f;
 
@@ -16,28 +17,36 @@ import main.java.models.threedee.Vector4f;
  * A simple ray tracer. It does barely any optimising and is made to be easily understandable.
  * 
  * @author Elwin Slokker
- * @version 0.1
+ * @version 0.2
  */
 public class SimpleRayTracer extends RayTracer
 {
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void render(List<RenderableObject> objects, CameraInterface myCamera, PixelWriter writer, Point2D shift)
+    public void render(final List<RenderableObject> objects, final CameraInterface myCamera, final PixelWriter writer, final Point2D shift)
     {
-        for(float x = 0; x < myCamera.getSceenSpaceMatrix().get(0, 0) * 2; x++)
+        final float width = Matrix4fUtilities.getScreenWidth(myCamera.getSceenSpaceMatrix()) / 2;
+        final float height = Matrix4fUtilities.getScreenHeight(myCamera.getSceenSpaceMatrix()) / 2;
+        for(float x = -width + X_PIXEL_CORRECTION; x < width + X_PIXEL_CORRECTION; x++)
         {
-            for(float y = 0; y < myCamera.getSceenSpaceMatrix().get(1, 1) * -2; y++)
+            for(float y = -height + Y_PIXEL_CORRECTION; y < height  + Y_PIXEL_CORRECTION; y++)
             {
-                Vector4f ray = null;
+                Vector4f ray = myCamera.getTransform().getTransformedRot().getForward();//then change direction of the forward.
                 //make the ray
                 writer.setColor((int) (x + shift.getX()), (int) (y + shift.getY()), calculateRay(objects, myCamera, ray));
             }
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Image render(List<RenderableObject> objects, CameraInterface myCamera)
+    public Image render(final List<RenderableObject> objects, final CameraInterface myCamera)
     {
-        WritableImage render = null;
+        final WritableImage render = null; 
         render(objects, myCamera, render.getPixelWriter(), new Point2D(0,0));
         return render;
     }
@@ -48,7 +57,7 @@ public class SimpleRayTracer extends RayTracer
         //nothing
     }
     
-    private Color calculateRay(List<RenderableObject> objects, CameraInterface myCamera, Vector4f rayDirection)
+    private Color calculateRay(final List<RenderableObject> objects, final CameraInterface myCamera, final Vector4f rayDirection)
     {
         float distance = Float.MAX_VALUE;
         Polygon currentMinimum = null;
@@ -64,11 +73,11 @@ public class SimpleRayTracer extends RayTracer
                 }
             }
         }
-        
-        //find first collision with polygon
         //IF or IFNOT transparent....
         //recusively trace all rays afterwards.
-        return Color.ALICEBLUE;//TODO stub
+        return (currentMinimum == null)?
+                myCamera.getScene().getBackgroundColor(myCamera.getTransform().getPos(), rayDirection):
+                Color.ALICEBLUE;//stub color
     }/**
      * 
      * @param origin of the ray.
@@ -157,7 +166,25 @@ public class SimpleRayTracer extends RayTracer
 
             resultZ = edge2.dotProduct(qvec) * inv_det;
         }
-
+        final Vector4f collisionLocation = direction.multiply(resultZ).add(origin);//location of collision.
         return resultZ;//distance
         }
+    /**
+     * Calculates all the secondary rays that seek the light sources that iluminate this pixel.
+     * 
+     * @param rayCollisionLocation
+     * @param originalDirection
+     * @param baseColor
+     * @param polygon
+     * @return 
+     */
+    private Color calculateSecondaryRays(Vector4f rayCollisionLocation, Vector4f originalDirection, Color baseColor)
+    {
+        //determine if the polygon does or does not have a special reflection (normal map, reflectiveness or transparency with refraction)
+        //if reflection and ray is forced:
+        //look for light source on the way.
+        //else
+        //check every for any light source whether it is occluded or not. (and add the lighting values to the color)
+        return null;
+    }
 }

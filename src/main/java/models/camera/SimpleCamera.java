@@ -1,7 +1,7 @@
 package main.java.models.camera;
 
-import main.java.models.matrix.Matrix4f;
-import main.java.models.matrix.Matrix4fUtilities;
+import main.java.models.threedee.matrix.Matrix4f;
+import main.java.models.threedee.matrix.Matrix4fUtilities;
 import main.java.models.renderers.Renderer;
 import main.java.models.scene.RenderableScene;
 import main.java.models.threedee.Quaternion;

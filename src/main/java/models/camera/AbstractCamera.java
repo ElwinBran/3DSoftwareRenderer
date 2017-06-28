@@ -4,11 +4,12 @@ package main.java.models.camera;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
-import main.java.models.collision.BoundingVolume;
-import main.java.models.matrix.Matrix4f;
+import main.java.models.threedee.collision.BoundingVolumeInterface;
+import main.java.models.threedee.matrix.Matrix4f;
 import main.java.models.renderers.Renderer;
 import main.java.models.scene.RenderableScene;
 import main.java.models.threedee.Transform;
+import main.java.models.threedee.Vector4f;
 import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
 
 /**
@@ -17,15 +18,19 @@ import main.java.models.viewvolumeculling.ViewVolumeCullInterface;
  * or setting the view frustum culler. 
  * 
  * @author Elwin Slokker
- * @version 0.6
+ * @version 0.7
  */
 public abstract class AbstractCamera implements CameraInterface
 {
     /**
+     * Holds the position of the 'eye' of the camera.
+     */
+    private Vector4f eyePosition;
+    /**
      * The object that captures the scene in a 2D representation.
      */
     private Renderer renderer;
-        /**
+    /**
      * 
      * @param newRenderer 
      */
@@ -48,7 +53,7 @@ public abstract class AbstractCamera implements CameraInterface
     /**
      * The volume the camera uses to cull.
      */
-    private BoundingVolume boundingViewVolume;
+    private BoundingVolumeInterface boundingViewVolume;
     /**
      * 
      */
@@ -65,16 +70,17 @@ public abstract class AbstractCamera implements CameraInterface
      * {@inheritDoc }
      */
     @Override
-    @Deprecated
-    public boolean isUsable()
+    public Vector4f getEyePosition()
     {
-        return false;
+        return this.eyePosition;
     }
+    /**
+     * {@inheritDoc }
+     */
     @Override
-    @Deprecated
-    public void setUsable(boolean isUsable)
+    public void setEyePosition(Vector4f position)
     {
-        //this.isUsable = isUsable;
+        this.eyePosition = position;
     }
     /**
      * {@inheritDoc }
@@ -146,7 +152,7 @@ public abstract class AbstractCamera implements CameraInterface
      * {@inheritDoc}
      */
     @Override
-    public BoundingVolume getViewBoundingVolume()
+    public BoundingVolumeInterface getViewBoundingVolume()
     {
         return this.boundingViewVolume;
     }
@@ -154,7 +160,7 @@ public abstract class AbstractCamera implements CameraInterface
      * {@inheritDoc}
      */
     @Override
-    public void setViewBoundingVolume(BoundingVolume volume)
+    public void setViewBoundingVolume(BoundingVolumeInterface volume)
     {
         this.boundingViewVolume = volume;
     }
@@ -193,6 +199,11 @@ public abstract class AbstractCamera implements CameraInterface
         return renderer.render(this.viewVolumeCuller.meshesInsideViewFrustum(boundingViewVolume, this.containerScene.getObjects()), this);
     }
     
+    /**
+     * Should only be called through {@code super(builder)}.
+     * 
+     * @param builder a builder containing all attributes (missing one already crashes the program).
+     */
     public AbstractCamera(final BaseCameraBuilder builder)
     {
         this.containerScene = builder.containerScene;
@@ -200,5 +211,6 @@ public abstract class AbstractCamera implements CameraInterface
         this.type = builder.type;
         this.boundingViewVolume = builder.boundingViewVolume;
         this.viewVolumeCuller = builder.viewVolumeCuller;
+        this.eyePosition = builder.eyePosition;
     }
 }

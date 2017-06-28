@@ -1,5 +1,5 @@
 
-package main.java.models.collision;
+package main.java.models.threedee.collision;
 
 import main.java.models.threedee.Vector4f;
 
@@ -7,7 +7,7 @@ import main.java.models.threedee.Vector4f;
  * Any convex 3D object that wants to collide by using GJK algorithm must implement this interface.
  * 
  * @author Elwin Slokker
- * @version 0.1
+ * @version 0.2
  */
 public interface GJKAble
 {
@@ -17,5 +17,5 @@ public interface GJKAble
      * @param direction The given direction to look in.
      * @return A point on the edge of the shape.
      */
-    public Vector4f furthestPointFromDirection(Vector4f direction);
+    public Vector4f furthestPointFromDirection(final Vector4f direction);
 }

@@ -1,10 +1,10 @@
-package main.java.models.newmodels;
+package main.java.models.threedee.objects;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
-import main.java.models.matrix.Matrix4f;
-import main.java.models.matrix.Matrix4fUtilities;
+import main.java.models.threedee.matrix.Matrix4f;
+import main.java.models.threedee.matrix.Matrix4fUtilities;
 import main.java.models.threedee.Polygon;
 import main.java.models.threedee.Transform;
 import main.java.models.threedee.Vertex;
